@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+
+  postgres:
+    image: postgres:14
+    container_name: techspot-postgres
+
+    environment:
+      POSTGRES_DB: techspot_db
+      POSTGRES_USER: techspot_user
+      POSTGRES_PASSWORD: techspot_pass
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    networks:
+        - techspot-network
+
+volumes:
+  postgres_data:
+
+networks:
+  techspot-network:
+    driver: bridge
