@@ -2,23 +2,25 @@ package com.example.TechSpot.security;
 
 import com.example.TechSpot.entity.User;
 import com.example.TechSpot.exception.user.UserNotFoundException;
-import com.example.TechSpot.repository.CustomerRepository;
+import com.example.TechSpot.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import java.util.Set;
+
 
 @Component
 @RequiredArgsConstructor
 public class CustomUserDetailService implements UserDetailsService {
 
-	private final CustomerRepository customerRepository;
+	private final UserRepository userRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = customerRepository.findByEmail(username)
+		User user = userRepository.findByEmail(username)
 				.orElseThrow(UserNotFoundException::new);
 		return new CustomUserDetail(
 				user.getId(),

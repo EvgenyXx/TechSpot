@@ -5,17 +5,17 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public record CustomUserDetail(UUID id, String email, String password, String firstname, String lastname,
-							   Role role) implements UserDetails {
+							   Set<Role> roles ) implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of(new SimpleGrantedAuthority(role.name()));
+		return roles.stream()
+				.map(role -> new SimpleGrantedAuthority(role.name()))
+				.collect(Collectors.toList());
 	}
 
 	@Override
@@ -48,11 +48,12 @@ public record CustomUserDetail(UUID id, String email, String password, String fi
 		return true;
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (o == null || getClass() != o.getClass()) return false;
-		CustomUserDetail that = (CustomUserDetail) o;
-		return Objects.equals(id, that.id) && Objects.equals(email, that.email) && Objects.equals(password, that.password) && Objects.equals(firstname, that.firstname) && Objects.equals(lastname, that.lastname) && role == that.role;
-	}
+//	@Override
+//	public boolean equals(Object o) {
+//		if (o == null || getClass() != o.getClass()) return false;
+//		CustomUserDetail that = (CustomUserDetail) o;
+//		return Objects.equals(id, that.id) && Objects.equals(email, that.email) && Objects.equals(password, that.password)
+//				&& Objects.equals(firstname, that.firstname) && Objects.equals(lastname, that.lastname) && role == that.role;
+//	}
 
 }
