@@ -24,7 +24,7 @@ public class ApiPaths {
 	public static final String CLEAR_CART = "/clear";
 	public static final String SEARCH = "/search";
 	public static final String ITEMS_QUANTITY = ITEMS + "/quantity";
-	public static final String REMOVE_ITEM = "/items/remove";
+	public static final String REMOVE_ITEM = ITEMS + "/{cartItemId}";  // ✅ ИСПРАВЬ ТУТ
 	public static final String CREATE_PRODUCT = "/create";
 	public static final String GET_MY_PRODUCTS = "/my-products";
 	public static final String TOP_PRODUCTS = "/top";

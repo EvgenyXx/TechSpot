@@ -5,6 +5,9 @@ import com.example.TechSpot.constants.ApiPaths;
 import com.example.TechSpot.dto.user.UserRequest;
 import com.example.TechSpot.dto.user.UserResponse;
 import com.example.TechSpot.service.user.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -24,7 +27,9 @@ public class AuthController {
 	private final AuthService authService;
 
 
-	//TODO ДОБАВИТЬ СВАГЕР ДОКУМЕНТАЦИЮ
+	@Operation(summary = "Регистрация пользователя", description = "Создает нового пользователя в системе")
+	@ApiResponse(responseCode = "201", description = "Пользователь успешно создан")
+	@ApiResponse(responseCode = "400", description = "Невалидные данные")
 	@PostMapping(ApiPaths.REGISTER)
 	public ResponseEntity<UserResponse> register(@RequestBody @Valid UserRequest request) {
 
