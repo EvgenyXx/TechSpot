@@ -1,9 +1,15 @@
 package com.example.TechSpot.dto.cart.request;
 
-import java.util.UUID;
-//todo добавить валидацию
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 
+@Schema(description = "Запрос на удаление товара из корзины")
 public record RemoveFromCartRequest(
-		UUID userId, Long cartItemId
+		@Schema(
+				description = "ID позиции в корзине",
+				example = "123"
+		)
+		@NotNull(message = "Cart item ID cannot be null")
+		Long cartItemId
 ) {
 }

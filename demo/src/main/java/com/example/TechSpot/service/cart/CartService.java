@@ -117,11 +117,11 @@ public class CartService {
 				.findFirst();
 	}
 
-	public CartResponse removeFromCart(RemoveFromCartRequest request) {
+	public CartResponse removeFromCart(Long cartItemId,UUID userId) {
 
-		Cart cartUser = checkingCartForUser(request.userId());
+		Cart cartUser = checkingCartForUser(userId);
 		boolean removed = cartUser.getCartItems()
-						.removeIf(cartItems -> cartItems.getId().equals(request.cartItemId()));
+						.removeIf(cartItems -> cartItems.getId().equals(cartItemId));
 
 		if (!removed){
 			throw new CartItemsNotFoundException();
@@ -134,9 +134,9 @@ public class CartService {
 	}
 
 	// 4. ✅ ИЗМЕНИТЬ КОЛИЧЕСТВО ТОВАРА
-	public CartResponse updateQuantity(UpdateQuantityRequest request) {
+	public CartResponse updateQuantity(UpdateQuantityRequest request,UUID userId) {
 
-		Cart cart = checkingCartForUser(request.userId());
+		Cart cart = checkingCartForUser(userId);
 
 		CartItems cartItems = cart.getCartItems()
 				.stream()
