@@ -1,6 +1,7 @@
 package com.example.TechSpot.controller.cart;
 
 
+import com.example.TechSpot.constants.ApiPaths;
 import com.example.TechSpot.dto.cart.request.AddToCartRequest;
 import com.example.TechSpot.dto.cart.request.RemoveFromCartRequest;
 import com.example.TechSpot.dto.cart.request.UpdateQuantityRequest;
@@ -13,39 +14,37 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
-
 @RestController
-@RequestMapping("/api/v1/cart")
+@RequestMapping(ApiPaths.CART_BASE)
 @RequiredArgsConstructor
 public class CartController {
 
 	private final CartService cartService;
 
-	@GetMapping("/{userId}")
-	public ResponseEntity<CartResponse> getCart(@PathVariable UUID userId) {
-		return ResponseEntity.ok(cartService.getCart(userId));
+	@GetMapping
+	public ResponseEntity<CartResponse> getCart(@AuthenticationPrincipal CustomUserDetail customUserDetail) {
+		return ResponseEntity.ok(cartService.getCart(customUserDetail.id()));
 	}
 
-	@PostMapping("/items")
+	@PostMapping(ApiPaths.ITEMS)
 	public ResponseEntity<CartResponse> addItem(@RequestBody AddToCartRequest request,
 												@AuthenticationPrincipal CustomUserDetail userDetail) {
 		return ResponseEntity.ok(cartService.addToCart(request,userDetail.id()));
 	}
 
-	@PutMapping("/items/quantity")
+	@PutMapping(ApiPaths.ITEMS_QUANTITY)
 	public ResponseEntity<CartResponse> updateQuantity(@RequestBody UpdateQuantityRequest request) {
 		return ResponseEntity.ok(cartService.updateQuantity(request));
 	}
 
-	@DeleteMapping("/items")
+	@DeleteMapping(ApiPaths.REMOVE_ITEM)
 	public ResponseEntity<CartResponse> removeItem(@RequestBody RemoveFromCartRequest request) {
 		return ResponseEntity.ok(cartService.removeFromCart(request));
 	}
 
-	@DeleteMapping("/{userId}/clear")
-	public ResponseEntity<Void> clearCart(@PathVariable UUID userId) {
-		cartService.clearCart(userId);
+	@DeleteMapping(ApiPaths.CLEAR_CART)
+	public ResponseEntity<Void> clearCart(@AuthenticationPrincipal CustomUserDetail customUserDetail) {
+		cartService.clearCart(customUserDetail.id());
 		return ResponseEntity.noContent().build(); // 204 вместо 200
 	}
 }
