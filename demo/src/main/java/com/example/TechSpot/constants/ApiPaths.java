@@ -29,6 +29,9 @@ public class ApiPaths {
 	public static final String GET_MY_PRODUCTS = "/my-products";
 	public static final String TOP_PRODUCTS = "/top";
 	public static final String PRODUCTS_BY_CATEGORY = "/category";
+	public static final String CURRENT_USER = "/me";
+	public static final String UPDATE_PROFILE = "/profile";
+	public static final String UPDATE_PRODUCT = "/update";
 
 	// PATH VARIABLES (шаблоны с {})
 	public static final String USER_ID = "/{userId}";

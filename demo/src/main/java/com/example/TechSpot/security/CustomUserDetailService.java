@@ -9,8 +9,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import java.util.Set;
-
 
 @Component
 @RequiredArgsConstructor
@@ -28,7 +26,8 @@ public class CustomUserDetailService implements UserDetailsService {
 				user.getHashPassword(),
 				user.getFirstname(),
 				user.getLastname(),
-				user.getRole()
+				user.getRoles(),
+				user.isActive()
 		);
 	}
 }
