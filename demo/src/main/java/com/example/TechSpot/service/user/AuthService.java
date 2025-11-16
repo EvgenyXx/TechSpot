@@ -8,12 +8,14 @@ import com.example.TechSpot.entity.User;
 import com.example.TechSpot.exception.user.DuplicateEmailException;
 import com.example.TechSpot.exception.user.DuplicatePhoneNumberException;
 import com.example.TechSpot.mapping.UserMapper;
-import com.example.TechSpot.repository.CustomerRepository;
+import com.example.TechSpot.repository.UserRepository;
 import com.example.TechSpot.security.CustomUserDetailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +23,7 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
 	private final UserMapper userMapper;
-	private final CustomerRepository customerRepository;
+	private final UserRepository userRepository;
 	private final CustomUserDetailService userDetailsService;
 	private final PasswordEncoder passwordEncoder; // ← ДОБАВЬ ЭТО!
 
@@ -31,10 +33,10 @@ public class AuthService {
 		checkingUniqueEmail(request);
 
 		User user = userMapper.toCustomer(request);
-		user.setRole(Role.ROLE_USER);
+		user.setRole(Set.of(Role.ROLE_USER));
 		user.setHashPassword(passwordEncoder.encode(request.password())); // ← ХЕШИРУЕМ!
 
-		User savedBuyer = customerRepository.save(user);
+		User savedBuyer = userRepository.save(user);
 		log.info("Покупатель успешно прошел регистрацию {}", savedBuyer.getId());
 
 
@@ -45,7 +47,7 @@ public class AuthService {
 	private void checkingUniquePhoneNumber(UserRequest userRequest){
 		log.info("Началась проверка уникальности номера телефона {}",
 				userRequest.phoneNumber());
-		if (customerRepository.existsByPhoneNumber(userRequest.phoneNumber())){
+		if (userRepository.existsByPhoneNumber(userRequest.phoneNumber())){
 			log.warn("Попытка зарегистрироваться с " +
 					"существующим номером телефона:{}", userRequest.phoneNumber());
 			throw new DuplicatePhoneNumberException();
@@ -55,7 +57,7 @@ public class AuthService {
 	private void checkingUniqueEmail(UserRequest userRequest){
 		log.info("Началась проверка уникальности электронной почти {}",
 				userRequest.email());
-		if (customerRepository.existsByEmail(userRequest.email())){
+		if (userRepository.existsByEmail(userRequest.email())){
 			log.warn("Попытка зарегистрироваться с " +
 					"существующей электронной почтой:{}", userRequest.email());
 			throw new DuplicateEmailException();

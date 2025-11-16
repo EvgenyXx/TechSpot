@@ -11,6 +11,7 @@ import com.example.TechSpot.service.cart.CartService;
 import com.example.TechSpot.service.product.ProductCommandService;
 import com.example.TechSpot.service.product.ProductFinder;
 import com.example.TechSpot.service.user.UserFinder;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @Service
 @Log4j2
 @RequiredArgsConstructor
+@Transactional
 public class OrderService {
 
 	private final OrderRepository orderRepository;
@@ -34,10 +36,7 @@ public class OrderService {
 	private final ProductCommandService commandService;
 
 
-	/**
-	 * ✅ ОФОРМЛЕНИЕ ЗАКАЗА ИЗ КОРЗИНЫ
-	 * Пользователь оформляет заказ из своей корзины
-	 */
+
 	public OrderResponse checkout(UUID userId) {
 		User user = userFinder.findById(userId);
 		Cart cart = cartService.findByUserId(userId);
@@ -107,11 +106,7 @@ public class OrderService {
 
 
 	public List<OrderResponse> getOrderHistory(UUID userId) {
-		// TODO: 1. Проверить что пользователь существует
-		// TODO: 2. Найти все заказы пользователя
-		// TODO: 3. Отсортировать по дате создания (новые first)
-		// TODO: 4. Преобразовать в OrderResponse
-		// TODO: 5. Вернуть список заказов
+
 		userFinder.findById(userId);
 		List<Order> orders = orderRepository.findByUserIdOrderByCreatedAtDesc(userId);
 

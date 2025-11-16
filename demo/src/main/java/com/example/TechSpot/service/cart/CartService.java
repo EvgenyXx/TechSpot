@@ -64,11 +64,10 @@ public class CartService {
 	public CartResponse addToCart(AddToCartRequest request,UUID userId) {
 
 		Product product = productFinder.findById(request.productId());
-		validateProductQuantity(product,request.quantity());
 		Cart cart = cartRepository.findByUserId(userId)
 				.orElseGet(() -> createNewCart(userId));
 
-
+		validateProductQuantity(product,request.quantity(),cart);
 
 		createOrUpdateCartItems(cart, product, request.quantity());
 		recalculateCartTotal(cart);
@@ -87,8 +86,25 @@ public class CartService {
 		cart.setTotalPrice(total);
 	}
 
-	private void validateProductQuantity(Product product ,int quantity){
-		if (product.getQuantity() < quantity || product.getQuantity() == 0){
+	private void validateProductQuantity(Product product, int requestedQuantity, Cart cart) {
+		// Находим текущее количество этого товара в корзине
+		int currentInCart = cart.getCartItems().stream()
+				.filter(item -> item.getProduct().getId().equals(product.getId()))
+				.findFirst()
+				.map(CartItems::getQuantity)
+				.orElse(0);
+
+		// Общее количество которое будет в корзине после добавления
+		int totalInCartAfterAdd = currentInCart + requestedQuantity;
+
+		// Проверяем что не превышаем доступное количество
+		if (totalInCartAfterAdd > product.getQuantity()) {
+			throw new InsufficientStockException(
+
+			);
+		}
+
+		if (product.getQuantity() == 0) {
 			throw new InsufficientStockException();
 		}
 	}
