@@ -3,6 +3,7 @@ package com.example.TechSpot.service.product;
 
 import com.example.TechSpot.dto.product.ProductCreateRequest;
 import com.example.TechSpot.dto.product.ProductResponse;
+import com.example.TechSpot.dto.product.ProductUpdateRequest;
 import com.example.TechSpot.entity.Product;
 import com.example.TechSpot.entity.Role;
 import com.example.TechSpot.entity.User;
@@ -47,7 +48,7 @@ public class ProductCommandService {
 				.orElseThrow(ProductNotFoundException::new);
 
 		User user = userFinder.findById(userId);
-		boolean canDelete = user.getRole().contains( Role.ROLE_ADMIN) ||
+		boolean canDelete = user.getRoles().contains( Role.ROLE_ADMIN) ||
 				product.getUser().getId().equals(userId);
 
 		if (!canDelete) {
@@ -61,6 +62,26 @@ public class ProductCommandService {
 	public boolean reduceQuantity(Long productId, int quantity) {
 		int updatedRows = productRepository.reduceQuantity(productId, quantity);
 		return updatedRows > 0; // true если уменьшили, false если товара не хватило
+	}
+
+
+	public ProductResponse updateProduct(Long productId, ProductUpdateRequest request,UUID currentUser) {
+
+		log.info("Начало обновления товара {}",productId);
+		Product product = productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
+		User user = userFinder.findById(currentUser);
+
+		if (!product.getUser().getId().equals(user.getId())){
+			log.warn("Данный товар не пре надлежит данному пользователю {}",currentUser);
+			throw new ProductAccessDeniedException();
+		}
+
+		productMapper.updateProduct(request,product);
+
+		Product save = productRepository.save(product);
+
+		log.info("Товар был успешно обновлен {}",save.getId());
+		return productMapper.toResponseProduct(save);
 	}
 }
 

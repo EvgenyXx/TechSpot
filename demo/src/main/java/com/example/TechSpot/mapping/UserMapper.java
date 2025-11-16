@@ -1,11 +1,11 @@
 package com.example.TechSpot.mapping;
 
 
+import com.example.TechSpot.dto.user.UpdateProfileRequest;
 import com.example.TechSpot.dto.user.UserRequest;
 import com.example.TechSpot.dto.user.UserResponse;
 import com.example.TechSpot.entity.User;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
@@ -15,7 +15,9 @@ public interface UserMapper {
 
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "hashPassword", source = "password")
-//	@Mapping(target = "createdAt", ignore = true)
-//	@Mapping(target = "updatedAt", ignore = true)
 	User toCustomer(UserRequest userRequest);
+
+
+	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+	void updateUser(UpdateProfileRequest request, @MappingTarget User user);
 }

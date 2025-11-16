@@ -3,6 +3,7 @@ package com.example.TechSpot.controller.product;
 import com.example.TechSpot.constants.ApiPaths;
 import com.example.TechSpot.dto.product.ProductCreateRequest;
 import com.example.TechSpot.dto.product.ProductResponse;
+import com.example.TechSpot.dto.product.ProductUpdateRequest;
 import com.example.TechSpot.security.CustomUserDetail;
 import com.example.TechSpot.service.product.ProductCommandService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -91,5 +92,19 @@ public class ProductCommandController {
 		productCommandService.deleteProduct(productId, customUserDetail.id());
 
 		return ResponseEntity.noContent().build(); // 204 вместо 501
+	}
+
+	@PreAuthorize(IS_SELLER)
+	@PutMapping(ApiPaths.PRODUCT_ID)
+	public ResponseEntity<ProductResponse>updateProduct(
+			@AuthenticationPrincipal CustomUserDetail userDetail,
+			@PathVariable Long productId,
+			@RequestBody @Valid ProductUpdateRequest request){
+		log.info("HTTP PUT api/product/update/{productId} {}", productId);
+		ProductResponse response = productCommandService.updateProduct(productId,request,userDetail.id());
+		log.info("HTTP 200 успешно обновили товар {}", request.productName());
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(response);
 	}
 }

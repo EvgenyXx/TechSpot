@@ -2,11 +2,10 @@ package com.example.TechSpot.mapping;
 
 import com.example.TechSpot.dto.product.ProductCreateRequest;
 import com.example.TechSpot.dto.product.ProductResponse;
+import com.example.TechSpot.dto.product.ProductUpdateRequest;
 import com.example.TechSpot.entity.User;
 import com.example.TechSpot.entity.Product;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
+import org.mapstruct.*;
 
 
 @Mapper(componentModel = "spring")
@@ -29,6 +28,10 @@ public interface ProductMapper {
 	default String toFirstname (User user){
 		return user.getFirstname();
 	}
+
+
+	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+	void updateProduct(ProductUpdateRequest request, @MappingTarget Product product);
 
 
 

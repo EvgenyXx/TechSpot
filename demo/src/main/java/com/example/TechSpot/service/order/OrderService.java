@@ -3,6 +3,7 @@ package com.example.TechSpot.service.order;
 
 import com.example.TechSpot.dto.order.OrderResponse;
 import com.example.TechSpot.entity.*;
+import com.example.TechSpot.exception.OrderNotFoundException;
 import com.example.TechSpot.exception.cart.EmptyCartException;
 import com.example.TechSpot.exception.product.InsufficientStockException;
 import com.example.TechSpot.mapping.OrderMapper;
@@ -32,7 +33,6 @@ public class OrderService {
 	private final UserFinder userFinder;
 	private final CartService cartService;
 	private final OrderMapper orderMapper;
-	private final ProductFinder productFinder;
 	private final ProductCommandService commandService;
 
 
@@ -51,7 +51,7 @@ public class OrderService {
 		Order saveOrder = orderRepository.save(order);
 		cartService.clearCart(userId);
 
-		return orderMapper.toOrderResponse(saveOrder); // добавь маппер
+		return orderMapper.toOrderResponse(saveOrder);
 	}
 
 	private void updateProductQuantities(Cart cart) {
@@ -69,33 +69,31 @@ public class OrderService {
 
 	private Order createOrderFromCart(User user, Cart cart) {
 
-		// 1. Создаем Order БЕЗ OrderItems сначала
+
 		Order order = Order.builder()
 				.orderNumber(generateOrderNumber())
 				.user(user)
 				.orderStatus(OrderStatus.CREATED)
-				.totalPrice(cart.getTotalPrice()) // цена из корзины
-				.orderItems(new HashSet<>()) // пустой набор
+				.totalPrice(cart.getTotalPrice())
+				.orderItems(new HashSet<>())
 				.build();
 
-		// 2. Создаем OrderItems и связываем с Order
+
 		for (CartItems cartItem : cart.getCartItems()) {
 			OrderItems orderItem = OrderItems.builder()
-					.order(order)           // ← связываем с Order!
+					.order(order)
 					.product(cartItem.getProduct())
 					.productName(cartItem.getProduct().getProductName())
 					.itemPrice(cartItem.getProduct().getPrice())
 					.quantity(cartItem.getQuantity())
 					.build();
 
-			// 3. Добавляем в Order
 			order.getOrderItems().add(orderItem);
 		}
 
 		return order;
 	}
 
-	// Самый простой и надежный вариант
 	private String generateOrderNumber() {
 		String timestamp = Instant.now().toEpochMilli() + ""; // Unix timestamp
 		String random = String.valueOf(ThreadLocalRandom.current().nextInt(1000, 9999));
@@ -106,13 +104,22 @@ public class OrderService {
 
 
 	public List<OrderResponse> getOrderHistory(UUID userId) {
+		log.info("Начался поиск всех заказов текущего пользователя {}",userId);
 
 		userFinder.findById(userId);
 		List<Order> orders = orderRepository.findByUserIdOrderByCreatedAtDesc(userId);
-
+		log.info("Поиск всех заказов текущего завершился {}",userId);
 		return orders.stream()
 				.map(orderMapper::toOrderResponse)
 				.toList();
+	}
+
+	public OrderResponse getOrderById (UUID userId,Long orderId){
+		log.info("Начался поиск заказа пользователя {}",userId);
+		Order order = orderRepository.findByIdAndUserId(orderId,userId)
+				.orElseThrow(OrderNotFoundException::new);
+		log.info("Поиск заказа успешно был завершен");
+		return orderMapper.toOrderResponse(order);
 	}
 
 

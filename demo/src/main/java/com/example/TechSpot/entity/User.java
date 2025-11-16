@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -50,7 +49,7 @@ public class User extends BaseEntity {
 
 
 	@Enumerated(EnumType.STRING)
-	private Set<Role> role;
+	private Set<Role> roles;
 
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -58,6 +57,9 @@ public class User extends BaseEntity {
 
 	@OneToOne
 	private Cart cart;
+
+	@Column(name = "is_active",nullable = false)
+	private boolean isActive = true;
 
 
 }
