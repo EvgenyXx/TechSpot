@@ -1,6 +1,7 @@
-package com.example.TechSpot.controller;
+package com.example.TechSpot.controller.product;
 
 
+import com.example.TechSpot.constants.ApiPaths;
 import com.example.TechSpot.dto.product.ProductCreateRequest;
 import com.example.TechSpot.dto.product.ProductResponse;
 import com.example.TechSpot.security.CustomUserDetail;
@@ -13,17 +14,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
+
 
 @RestController
-@RequestMapping("/api/v1/command")
+@RequestMapping(ApiPaths.COMMAND_BASE)
 @RequiredArgsConstructor
 @Log4j2
 public class ProductCommandController {
 
 	private final ProductCommandService productCommandService;
 
-	@PostMapping("/create")
+	@PostMapping(ApiPaths.CREATE_PRODUCT)
 	public ResponseEntity<ProductResponse> createProduct(
 			@Valid @RequestBody ProductCreateRequest request,
 			@AuthenticationPrincipal CustomUserDetail customUserDetail){
@@ -36,12 +37,12 @@ public class ProductCommandController {
 				.body(productResponse);
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping(ApiPaths.PRODUCT_ID)
 	public ResponseEntity<Void> deleteProduct(
-			@PathVariable Long id,
-			@RequestHeader("X-Customer-Id") UUID customerId) {
-
-		log.info("DELETE /api/v1/products/{} - Удаление товара", id);
+			@PathVariable Long productId,
+			@AuthenticationPrincipal CustomUserDetail customUserDetail) {
+		productCommandService.deleteProduct(productId, customUserDetail.id());
+		log.info("DELETE /api/v1/products/{} - Удаление товара", productId);
 		return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
 	}
 
