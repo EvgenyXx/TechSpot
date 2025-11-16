@@ -1,4 +1,4 @@
-package com.example.TechSpot.controller;
+package com.example.TechSpot.controller.cart;
 
 
 import com.example.TechSpot.dto.cart.request.AddToCartRequest;

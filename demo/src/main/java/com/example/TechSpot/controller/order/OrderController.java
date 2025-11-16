@@ -1,4 +1,4 @@
-package com.example.TechSpot.controller;
+package com.example.TechSpot.controller.order;
 
 
 import com.example.TechSpot.dto.order.OrderResponse;

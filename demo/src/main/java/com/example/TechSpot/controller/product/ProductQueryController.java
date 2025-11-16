@@ -1,4 +1,4 @@
-package com.example.TechSpot.controller;
+package com.example.TechSpot.controller.product;
 
 
 import com.example.TechSpot.dto.product.ProductResponse;

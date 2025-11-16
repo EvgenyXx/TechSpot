@@ -1,4 +1,4 @@
-package com.example.TechSpot.controller;
+package com.example.TechSpot.controller.auth;
 
 
 import com.example.TechSpot.dto.user.UserRequest;

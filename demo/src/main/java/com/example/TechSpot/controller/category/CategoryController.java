@@ -1,4 +1,4 @@
-package com.example.TechSpot.controller;
+package com.example.TechSpot.controller.category;
 
 
 import com.example.TechSpot.entity.ProductCategory;
