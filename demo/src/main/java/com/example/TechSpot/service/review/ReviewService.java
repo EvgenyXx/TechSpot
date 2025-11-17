@@ -1,4 +1,4 @@
-package com.example.TechSpot.service;
+package com.example.TechSpot.service.review;
 
 
 import com.example.TechSpot.dto.review.ReviewCreateRequest;
@@ -7,16 +7,20 @@ import com.example.TechSpot.entity.Product;
 import com.example.TechSpot.entity.Review;
 import com.example.TechSpot.entity.User;
 import com.example.TechSpot.exception.DuplicateReviewException;
+import com.example.TechSpot.exception.ReviewAccessDeniedException;
 import com.example.TechSpot.exception.ReviewNotFoundException;
 import com.example.TechSpot.mapping.ReviewMapper;
 import com.example.TechSpot.repository.ReviewRepository;
 import com.example.TechSpot.service.product.ProductFinder;
 import com.example.TechSpot.service.user.UserFinder;
-import jakarta.transaction.Transactional;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.stereotype.Service;
 
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 import java.util.UUID;
 
 @Log4j2
@@ -75,4 +79,47 @@ public class ReviewService {
 			throw new DuplicateReviewException();
 		}
 	}
+
+	@Transactional(readOnly = true)
+	public List<ReviewResponse> getProductReviews(Long productId) {
+		log.info("Получение отзывов для товара ID: {}", productId);
+
+		List<ReviewResponse> reviews = reviewRepository.findByProductId(productId)
+				.stream()
+				.map(reviewMapper::toReviewResponse)
+				.toList();
+
+		log.info("Найдено {} отзывов для товара ID: {}", reviews.size(), productId);
+		return reviews;
+	}
+
+	@Transactional(readOnly = true)
+	public void deleteReview(Long reviewId, UUID userId) {
+		log.info("Удаление отзыва ID: {} пользователем: {}", reviewId, userId);
+
+		Review review = findById(reviewId);
+
+		if (!review.getUser().getId().equals(userId)) {
+			log.warn("Попытка удалить чужой отзыв. Отзыв: {}, Пользователь: {}", reviewId, userId);
+			throw new ReviewAccessDeniedException();
+		}
+
+		reviewRepository.delete(review);
+		log.info("Отзыв ID: {} успешно удален", reviewId);
+	}
+
+	@Transactional(readOnly = true)
+	public List<ReviewResponse> getUserReviews(UUID userId) {
+		log.info("Получение отзывов пользователя ID: {}", userId);
+
+		List<ReviewResponse> reviews = reviewRepository.findByUserId(userId)
+				.stream()
+				.map(reviewMapper::toReviewResponse)
+				.toList();
+
+		log.info("Найдено {} отзывов пользователя ID: {}", reviews.size(), userId);
+		return reviews;
+	}
+
+
 }

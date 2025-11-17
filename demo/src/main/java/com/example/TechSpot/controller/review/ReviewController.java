@@ -4,7 +4,7 @@ import com.example.TechSpot.constants.ApiPaths;
 import com.example.TechSpot.dto.review.ReviewCreateRequest;
 import com.example.TechSpot.dto.review.ReviewResponse;
 import com.example.TechSpot.security.CustomUserDetail;
-import com.example.TechSpot.service.ReviewService;
+import com.example.TechSpot.service.review.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;

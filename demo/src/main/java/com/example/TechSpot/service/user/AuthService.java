@@ -26,6 +26,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 import java.util.UUID;
@@ -43,6 +44,7 @@ public class AuthService {
 	private final AuthenticationManager authenticationManager; // ← ДОБАВЬ!
 
 
+	@Transactional
 	public UserResponse register(UserRequest request) {
 		log.info("Началась регистрация пользователя с номером:{} ", request.phoneNumber());
 		finder.checkingUniquePhoneNumber(request.phoneNumber());
@@ -107,6 +109,7 @@ public class AuthService {
 	}
 
 
+	@Transactional(readOnly = true)
 	public UserResponse getCurrentUser(UUID userId){
 		log.info("Получаем данные текущего пользователя {}",userId);
 		User user = finder.findById(userId);
@@ -115,6 +118,7 @@ public class AuthService {
 	}
 
 
+	@Transactional
 	public UserResponse updateProfile(UUID userId, UpdateProfileRequest request) {
 		log.info("Началось обновление профиля пользователя {}", userId);
 
