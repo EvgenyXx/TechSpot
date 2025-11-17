@@ -12,5 +12,5 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update  # ← Лучше update для Docker
+      ddl-auto: 'create-drop'  # ← Лучше update для Docker
     show-sql: true
