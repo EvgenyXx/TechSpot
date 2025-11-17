@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -27,25 +28,33 @@ public class AdminInitializer {
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void createDefaultAdmin() {
-		log.info(
-				"Создание базового супер пользователя "
-		);
-		if (!userFinder.existsByEmail("admin@techspot.com")) {
-			log.debug(
-					"Не удалось создать супер пользователя email уже занят"
-			);
-			User admin = User.builder()
-					.firstname("admin")
-					.lastname("admin")
-					.phoneNumber("+79181339188")
-					.email("admin@techspot.com")
-					.hashPassword(passwordEncoder.encode("admin123"))
-					.roles(Set.of(Role.ROLE_ADMIN,Role.ROLE_SELLER,Role.ROLE_USER))
-					.build();
-			userRepository.save(admin);
-			log.info(
-					"Супер пользователь был успешно создан "
-			);
-		}
+		log.info("=== СОЗДАНИЕ АДМИНА ===");
+
+		// Удаляем старого
+
+
+
+		String rawPassword = "admin123";
+		String encodedPassword = passwordEncoder.encode(rawPassword);
+
+
+		User admin = User.builder()
+				.firstname("admin")
+				.lastname("admin")
+				.phoneNumber("+79182331822")
+				.email("admin@techspot.com")
+				.isActive(true)
+				.hashPassword(encodedPassword)
+				.roles(Set.of(Role.ROLE_ADMIN, Role.ROLE_SELLER,Role.ROLE_USER))
+				.build();
+
+		User saved = userRepository.save(admin);
+
+		// ✅ ПРОВЕРКА ПАРОЛЯ
+		boolean passwordMatches = passwordEncoder.matches(rawPassword, saved.getHashPassword());
+		log.info("Пароль проверен: {}", passwordMatches ? "СОВПАДАЕТ" : "НЕ СОВПАДАЕТ");
+		log.info("Raw password: {}", rawPassword);
+		log.info("Encoded password: {}", saved.getHashPassword());
+		log.info("=== ========= ===");
 	}
 }

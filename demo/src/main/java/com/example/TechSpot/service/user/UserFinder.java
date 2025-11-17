@@ -38,9 +38,9 @@ public class UserFinder {
 
 		if (isEmailExists){
 			log.debug("Данный email уже используется {}",email);
-
 		}
-		return false;
+
+		return isEmailExists;
 	}
 
 	public void checkingUniquePhoneNumber(String phoneNumber){

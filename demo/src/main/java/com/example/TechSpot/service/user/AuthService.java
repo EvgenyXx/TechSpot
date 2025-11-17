@@ -7,16 +7,26 @@ import com.example.TechSpot.dto.user.UserRequest;
 import com.example.TechSpot.dto.user.UserResponse;
 import com.example.TechSpot.entity.Role;
 import com.example.TechSpot.entity.User;
+import com.example.TechSpot.exception.AccountNotActiveException;
 import com.example.TechSpot.exception.user.DuplicateEmailException;
 import com.example.TechSpot.exception.user.DuplicatePhoneNumberException;
 import com.example.TechSpot.exception.user.InvalidPasswordException;
 import com.example.TechSpot.mapping.UserMapper;
 import com.example.TechSpot.repository.UserRepository;
 import com.example.TechSpot.security.CustomUserDetailService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 import java.util.UUID;
@@ -31,7 +41,10 @@ public class AuthService {
 	private final CustomUserDetailService userDetailsService;
 	private final PasswordEncoder passwordEncoder; // ← ДОБАВЬ ЭТО!
 	private final UserFinder finder;
+	private final AuthenticationManager authenticationManager; // ← ДОБАВЬ!
 
+
+	@Transactional
 	public UserResponse register(UserRequest request) {
 		log.info("Началась регистрация пользователя с номером:{} ", request.phoneNumber());
 		finder.checkingUniquePhoneNumber(request.phoneNumber());
@@ -40,6 +53,7 @@ public class AuthService {
 		User user = userMapper.toCustomer(request);
 		user.setRoles(Set.of(Role.ROLE_USER));
 		user.setHashPassword(passwordEncoder.encode(request.password())); // ← ХЕШИРУЕМ!
+		user.setActive(true);
 
 		User savedBuyer = userRepository.save(user);
 		log.info("Покупатель успешно прошел регистрацию {}", savedBuyer.getId());
@@ -58,22 +72,44 @@ public class AuthService {
 		}
 	}
 
+	public UserResponse login(LoginRequest request, HttpServletRequest httpRequest) {
+		log.info("Началась авторизация пользователя по email {}", request.email());
 
-	public UserResponse login(LoginRequest request){
-		log.info("Началась авторизация пользователя по email {}",request.email());
-		User user = finder.findByEmail(request.email());
+			// 1. Находим пользователя по email
+			User user = finder.findByEmail(request.email());
 
-		if (!passwordEncoder.matches(request.password(), user.getHashPassword())){
-			log.debug("Введен не верный пароль для пользователя {}",user.getId());
-			throw new InvalidPasswordException();
-		}
-		log.info(
-				"Авторизация окончена успешно"
-		);
-		//todo add trow isActiv
-		return userMapper.toResponse(user);
+//			 2. Проверяем активность аккаунта
+			if (!user.isActive()) {
+				log.warn("Попытка входа в неактивный аккаунт: {}", request.email());
+				throw new AccountNotActiveException();
+			}
+
+			// 3. Проверяем пароль (дополнительная проверка)
+			if (!passwordEncoder.matches(request.password(), user.getHashPassword())) {
+				log.debug("Введен неверный пароль для пользователя {}", user.getId());
+				throw new InvalidPasswordException();
+			}
+
+			// 4. Аутентифицируем пользователя через Spring Security
+			Authentication authentication = authenticationManager.authenticate(
+					new UsernamePasswordAuthenticationToken(request.email(), request.password())
+			);
+
+			// 5. Устанавливаем аутентификацию в контекст безопасности
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+
+			// 6. Создаем сессию (для монолита)
+			HttpSession session = httpRequest.getSession(true);
+			session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
+
+			log.info("Авторизация окончена успешно для пользователя: {}", user.getId());
+			return userMapper.toResponse(user);
+
+
 	}
 
+
+	@Transactional(readOnly = true)
 	public UserResponse getCurrentUser(UUID userId){
 		log.info("Получаем данные текущего пользователя {}",userId);
 		User user = finder.findById(userId);
@@ -82,6 +118,7 @@ public class AuthService {
 	}
 
 
+	@Transactional
 	public UserResponse updateProfile(UUID userId, UpdateProfileRequest request) {
 		log.info("Началось обновление профиля пользователя {}", userId);
 

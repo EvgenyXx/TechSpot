@@ -58,8 +58,9 @@ public class User extends BaseEntity {
 	@OneToOne
 	private Cart cart;
 
-	@Column(name = "is_active",nullable = false)
-	private boolean isActive = true;
+	// ✅ ЯВНО УКАЗАНО ИМЯ КОЛОНКИ
+	@Column(name = "is_active", nullable = false)
+	private boolean isActive ;
 
 
 }
