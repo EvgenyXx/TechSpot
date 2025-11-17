@@ -9,6 +9,7 @@ import com.example.TechSpot.security.CustomUserDetail;
 import com.example.TechSpot.service.user.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -48,9 +49,10 @@ public class AuthController {
 	@ApiResponse(responseCode = "401", description = "Неверный email или пароль")
 	@ApiResponse(responseCode = "404", description = "Пользователь не найден")
 	@PostMapping(ApiPaths.LOGIN)
-	public ResponseEntity<UserResponse> login(@RequestBody @Valid LoginRequest request) {
+	public ResponseEntity<UserResponse> login(@RequestBody @Valid LoginRequest request,
+											  HttpServletRequest httpRequest) {
 		log.info("HTTP POST api/auth/login {}", request.email());
-		UserResponse response = authService.login(request);
+		UserResponse response = authService.login(request, httpRequest);
 		log.info("HTTP 200 успешная авторизация {}", request.email());
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}

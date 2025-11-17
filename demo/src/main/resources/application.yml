@@ -8,6 +8,8 @@ spring:
     username: techspot_user
     password: techspot_pass
 
+
+
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
@@ -22,3 +24,8 @@ spring:
     console:
       enabled: false
 
+
+#logging:
+#  level:
+#    org.springframework.security: DEBUG
+#    org.springframework.web: DEBUG
