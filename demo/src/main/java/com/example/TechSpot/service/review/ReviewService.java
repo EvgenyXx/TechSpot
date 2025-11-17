@@ -25,7 +25,7 @@ import java.util.UUID;
 
 @Log4j2
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor // todo add methods in controller
 public class ReviewService {
 
 	private final UserFinder userFinder;
