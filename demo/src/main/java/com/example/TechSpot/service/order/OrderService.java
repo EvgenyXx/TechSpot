@@ -10,12 +10,12 @@ import com.example.TechSpot.mapping.OrderMapper;
 import com.example.TechSpot.repository.OrderRepository;
 import com.example.TechSpot.service.cart.CartService;
 import com.example.TechSpot.service.product.ProductCommandService;
-import com.example.TechSpot.service.product.ProductFinder;
 import com.example.TechSpot.service.user.UserFinder;
-import jakarta.transaction.Transactional;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 
@@ -26,7 +26,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @Service
 @Log4j2
 @RequiredArgsConstructor
-@Transactional
+
 public class OrderService {
 
 	private final OrderRepository orderRepository;
@@ -37,6 +37,7 @@ public class OrderService {
 
 
 
+	@Transactional
 	public OrderResponse checkout(UUID userId) {
 		User user = userFinder.findById(userId);
 		Cart cart = cartService.findByUserId(userId);
@@ -103,6 +104,7 @@ public class OrderService {
 
 
 
+	@Transactional(readOnly = true)
 	public List<OrderResponse> getOrderHistory(UUID userId) {
 		log.info("Начался поиск всех заказов текущего пользователя {}",userId);
 
@@ -114,6 +116,7 @@ public class OrderService {
 				.toList();
 	}
 
+	@Transactional(readOnly = true)
 	public OrderResponse getOrderById (UUID userId,Long orderId){
 		log.info("Начался поиск заказа пользователя {}",userId);
 		Order order = orderRepository.findByIdAndUserId(orderId,userId)

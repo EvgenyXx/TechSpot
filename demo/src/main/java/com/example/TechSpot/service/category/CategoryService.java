@@ -15,6 +15,7 @@ import java.util.List;
 public class CategoryService {
 
 
+
 	public List<ProductCategory> getAllCategories() {
 		return Arrays.asList(ProductCategory.values());
 	}

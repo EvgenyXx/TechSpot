@@ -35,6 +35,7 @@ public class ApiPaths {
 	public static final String UPDATE_PRODUCT = "/update";
 	public static final String REVIEW_PRODUCT = "/product";
 	public static final String REVIEW_HELPFUL = "/helpful";
+	public static final String MY_REVIEWS = "/my-reviews";
 
 	// PATH VARIABLES (шаблоны с {})
 	public static final String USER_ID = "/{userId}";

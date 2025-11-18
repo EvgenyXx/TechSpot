@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,6 +25,7 @@ public class ProductQueryService {
 	private final ProductMapper productMapper;
 
 
+	@Transactional(readOnly = true)
 	public ProductResponse getProduct(Long id) {
 		return productRepository
 				.findById(id)
@@ -31,6 +33,7 @@ public class ProductQueryService {
 				.orElseThrow(ProductNotFoundException::new);
 	}
 
+	@Transactional(readOnly = true)
 	public Page<ProductResponse> getAllProducts(Pageable pageable) {
 		return productRepository
 				.findAll(pageable)
@@ -38,6 +41,7 @@ public class ProductQueryService {
 	}
 
 
+	@Transactional(readOnly = true)
 	public Page<ProductResponse> searchProducts(String query, Pageable pageable) {
 		return productRepository
 				.searchProduct(
@@ -47,12 +51,14 @@ public class ProductQueryService {
 				).map(productMapper::toResponseProduct);
 	}
 
+	@Transactional(readOnly = true)
 	public Page<ProductResponse> filterProductsByCategory(ProductCategory category, Pageable pageable) {
 		return productRepository
 				.findByCategory(category,pageable)
 				.map(productMapper::toResponseProduct);
 	}
 
+	@Transactional(readOnly = true)
 	public List<ProductResponse> getMyProducts(UUID customerId) {
 		return productRepository
 				.findByUserId(customerId)
@@ -62,6 +68,7 @@ public class ProductQueryService {
 
 	}
 
+	@Transactional(readOnly = true)
 	public List<ProductResponse> getTopProductsByCategory(ProductCategory category, int limit) {
 		Pageable pageable = PageRequest.of(0,limit);
 

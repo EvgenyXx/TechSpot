@@ -5,19 +5,20 @@ import com.example.TechSpot.entity.Role;
 import com.example.TechSpot.entity.User;
 import com.example.TechSpot.repository.UserRepository;
 import com.example.TechSpot.service.user.UserFinder;
-import jakarta.transaction.Transactional;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 import java.util.UUID;
 
 @Service
-@Transactional
+
 @RequiredArgsConstructor
 @Log4j2
 public class AdminInitializer {
@@ -26,13 +27,10 @@ public class AdminInitializer {
 	private final UserRepository userRepository;
 
 
+	@Transactional
 	@EventListener(ApplicationReadyEvent.class)
 	public void createDefaultAdmin() {
 		log.info("=== СОЗДАНИЕ АДМИНА ===");
-
-		// Удаляем старого
-
-
 
 		String rawPassword = "admin123";
 		String encodedPassword = passwordEncoder.encode(rawPassword);

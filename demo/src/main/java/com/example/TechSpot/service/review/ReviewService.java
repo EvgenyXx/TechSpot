@@ -93,7 +93,7 @@ public class ReviewService {
 		return reviews;
 	}
 
-	@Transactional(readOnly = true)
+	@Transactional()
 	public void deleteReview(Long reviewId, UUID userId) {
 		log.info("Удаление отзыва ID: {} пользователем: {}", reviewId, userId);
 

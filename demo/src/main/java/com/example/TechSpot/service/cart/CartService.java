@@ -18,6 +18,7 @@ import com.example.TechSpot.service.user.UserFinder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -39,7 +40,7 @@ public class CartService {
 
 	private final ProductFinder productFinder;
 
-	// 1. ✅ ПОЛУЧИТЬ КОРЗИНУ ПОЛЬЗОВАТЕЛЯ
+	@Transactional(readOnly = true)
 	public CartResponse getCart(UUID userId) {
 
 		Cart cart = cartRepository.findByUserId(userId)
@@ -48,7 +49,7 @@ public class CartService {
 		return cartMapper.toCart(cart);
 	}
 
-	// Вспомогательный метод для создания новой корзины
+
 	private Cart createNewCart(UUID userId) {
 		User user = userFinder.findById(userId);
 
@@ -61,6 +62,7 @@ public class CartService {
 		return cartRepository.save(newCart); // Сохраняем новую корзину в БД
 	}
 
+	@Transactional
 	public CartResponse addToCart(AddToCartRequest request,UUID userId) {
 
 		Product product = productFinder.findById(request.productId());
@@ -133,6 +135,7 @@ public class CartService {
 				.findFirst();
 	}
 
+	@Transactional
 	public CartResponse removeFromCart(Long cartItemId,UUID userId) {
 
 		Cart cartUser = checkingCartForUser(userId);
@@ -149,7 +152,7 @@ public class CartService {
 		return cartMapper.toCart(saveCart);
 	}
 
-	// 4. ✅ ИЗМЕНИТЬ КОЛИЧЕСТВО ТОВАРА
+	@Transactional
 	public CartResponse updateQuantity(UpdateQuantityRequest request,UUID userId) {
 
 		Cart cart = checkingCartForUser(userId);
@@ -166,7 +169,7 @@ public class CartService {
 		return cartMapper.toCart(saveCart);
 	}
 
-	// 5. ✅ ОЧИСТИТЬ КОРЗИНУ
+	@Transactional
 	public void clearCart(UUID userId) {
 		Cart cart = checkingCartForUser(userId);
 		cart.getCartItems().clear();
