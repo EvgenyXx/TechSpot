@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Log4j2
-@Transactional
 @RequiredArgsConstructor
 public class ProductFinder {
 
