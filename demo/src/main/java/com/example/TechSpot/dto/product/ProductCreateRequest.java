@@ -48,10 +48,7 @@ public record ProductCreateRequest(
 		@Size(min = 10, max = 1000, message = "Описание должно быть от 10 до 1000 символов")
 		String description,
 
-		@Schema(
-				description = "Категория товара",
-				example = "ELECTRONICS"
-		)
-		@NotNull(message = "Категория обязательна для выбора")
-		ProductCategory category
+		@Schema(description = "ID категории товара", example = "1")
+		@NotNull(message = "ID категории обязателен")
+		Long categoryId // ← Используем ID существующей категории
 ) {}

@@ -1,5 +1,6 @@
-package com.example.TechSpot.exception;
+package com.example.TechSpot.exception.order;
 
+import com.example.TechSpot.exception.BaseException;
 import org.springframework.http.HttpStatus;
 
 public class OrderNotFoundException extends BaseException {

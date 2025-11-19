@@ -3,7 +3,7 @@ package com.example.TechSpot.service.order;
 
 import com.example.TechSpot.dto.order.OrderResponse;
 import com.example.TechSpot.entity.*;
-import com.example.TechSpot.exception.OrderNotFoundException;
+import com.example.TechSpot.exception.order.OrderNotFoundException;
 import com.example.TechSpot.exception.cart.EmptyCartException;
 import com.example.TechSpot.exception.product.InsufficientStockException;
 import com.example.TechSpot.mapping.OrderMapper;

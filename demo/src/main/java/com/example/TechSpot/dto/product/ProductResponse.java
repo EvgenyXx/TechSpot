@@ -26,7 +26,7 @@ public record ProductResponse(
 		String description,
 
 		@Schema(description = "Категория товара", example = "ELECTRONICS")
-		ProductCategory productCategory,
+		String productCategory,
 
 		@Schema(description = "Имя продавца", example = "Иван Петров")
 		String customerName,

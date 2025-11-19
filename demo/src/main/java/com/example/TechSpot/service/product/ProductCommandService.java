@@ -4,6 +4,7 @@ package com.example.TechSpot.service.product;
 import com.example.TechSpot.dto.product.ProductCreateRequest;
 import com.example.TechSpot.dto.product.ProductResponse;
 import com.example.TechSpot.dto.product.ProductUpdateRequest;
+import com.example.TechSpot.entity.Category;
 import com.example.TechSpot.entity.Product;
 import com.example.TechSpot.entity.Role;
 import com.example.TechSpot.entity.User;
@@ -11,6 +12,7 @@ import com.example.TechSpot.exception.product.ProductAccessDeniedException;
 import com.example.TechSpot.exception.product.ProductNotFoundException;
 import com.example.TechSpot.mapping.ProductMapper;
 import com.example.TechSpot.repository.ProductRepository;
+import com.example.TechSpot.service.category.CategoryFinder;
 import com.example.TechSpot.service.user.UserFinder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -22,13 +24,13 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Log4j2
-
 public class ProductCommandService {
 
 
 	private final ProductRepository productRepository;
 	private final UserFinder userFinder;
 	private final ProductMapper productMapper;
+	private final CategoryFinder categoryFinder;
 
 
 	@Transactional
@@ -36,11 +38,13 @@ public class ProductCommandService {
 
 		log.info("Началось создание товара {}",createRequest.productName());
 		User user = userFinder.findById(userId);
+		Category category = categoryFinder.findLeafCategoryById(createRequest.categoryId());
 		Product product = productMapper.toProduct(createRequest);
 		product.setUser(user);
+		product.setCategory(category);
 		Product createProduct = productRepository.save(product);
 		log.info("Товар {} был успешно создан ",createProduct.getProductName());
-		return productMapper.toResponseProduct(createProduct);
+		return productMapper.toResponseProductWithCalculatedFields(createProduct);
 	}
 
 	@Transactional
@@ -82,10 +86,10 @@ public class ProductCommandService {
 
 		productMapper.updateProduct(request,product);
 
-		Product save = productRepository.save(product);
+		Product saveProduct = productRepository.save(product);
 
-		log.info("Товар был успешно обновлен {}",save.getId());
-		return productMapper.toResponseProduct(save);
+		log.info("Товар был успешно обновлен {}",saveProduct.getId());
+		return productMapper.toResponseProductWithCalculatedFields(saveProduct);
 	}
 }
 

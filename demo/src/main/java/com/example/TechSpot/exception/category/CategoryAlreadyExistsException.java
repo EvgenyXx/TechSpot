@@ -1,0 +1,17 @@
+package com.example.TechSpot.exception.category;
+
+
+import com.example.TechSpot.exception.BaseException;
+import org.springframework.http.HttpStatus;
+
+
+public class CategoryAlreadyExistsException extends BaseException {
+
+	public CategoryAlreadyExistsException(){
+		super(
+				"Категория с таким названием уже существует в этой ветке",
+				HttpStatus.CONFLICT,
+				"CATEGORY_ALREADY"
+		);
+	}
+}

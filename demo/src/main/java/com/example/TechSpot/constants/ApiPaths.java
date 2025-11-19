@@ -36,6 +36,9 @@ public class ApiPaths {
 	public static final String REVIEW_PRODUCT = "/product";
 	public static final String REVIEW_HELPFUL = "/helpful";
 	public static final String MY_REVIEWS = "/my-reviews";
+	public static final String ROOT = "/root";
+	public static final String SUBCATEGORIES = "/subcategories";
+	public static final String BY_SLUG = "/slug";
 
 	// PATH VARIABLES (шаблоны с {})
 	public static final String USER_ID = "/{userId}";
@@ -44,4 +47,7 @@ public class ApiPaths {
 	public static final String CATEGORY_NAME = "/{category}";
 	public static final String ITEM_ID = "/{itemId}";
 	public static final String REVIEW_ID = "/{reviewId}";
+	public static final String PARENT_ID = "/{parentId}";
+	public static final String CATEGORY_ID = "/{categoryId}";
+	public static final String SLUG = "/{slug}";
 }
