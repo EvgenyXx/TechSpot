@@ -1,10 +1,10 @@
 package com.example.TechSpot.service.category;
 
-import com.example.TechSpot.dto.CategoryCreateRequest;
-import com.example.TechSpot.dto.CategoryResponse;
+import com.example.TechSpot.dto.category.CategoryCreateRequest;
+import com.example.TechSpot.dto.category.CategoryResponse;
 import com.example.TechSpot.entity.Category;
-import com.example.TechSpot.exception.CategoryAlreadyExistsException;
-import com.example.TechSpot.exception.SlugAlreadyExistsException;
+import com.example.TechSpot.exception.category.CategoryAlreadyExistsException;
+import com.example.TechSpot.exception.review.SlugAlreadyExistsException;
 import com.example.TechSpot.mapping.CategoryMapper;
 import com.example.TechSpot.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;

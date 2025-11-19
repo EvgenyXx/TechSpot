@@ -1,8 +1,8 @@
 package com.example.TechSpot.service.category;
 
-import com.example.TechSpot.dto.CategoryResponse;
+import com.example.TechSpot.dto.category.CategoryResponse;
 import com.example.TechSpot.entity.Category;
-import com.example.TechSpot.exception.CategoryNotFoundException;
+import com.example.TechSpot.exception.category.CategoryNotFoundException;
 import com.example.TechSpot.mapping.CategoryMapper;
 import com.example.TechSpot.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;

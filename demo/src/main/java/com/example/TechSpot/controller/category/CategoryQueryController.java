@@ -1,7 +1,7 @@
 package com.example.TechSpot.controller.category;
 
 import com.example.TechSpot.constants.ApiPaths;
-import com.example.TechSpot.dto.CategoryResponse;
+import com.example.TechSpot.dto.category.CategoryResponse;
 import com.example.TechSpot.service.category.CategoryQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

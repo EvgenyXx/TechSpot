@@ -2,7 +2,7 @@ package com.example.TechSpot.service.category;
 
 import com.example.TechSpot.entity.Category;
 
-import com.example.TechSpot.exception.NotLeafCategoryException;
+import com.example.TechSpot.exception.category.NotLeafCategoryException;
 import com.example.TechSpot.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

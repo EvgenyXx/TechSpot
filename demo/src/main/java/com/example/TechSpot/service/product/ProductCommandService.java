@@ -24,7 +24,6 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Log4j2
-
 public class ProductCommandService {
 
 
@@ -45,7 +44,7 @@ public class ProductCommandService {
 		product.setCategory(category);
 		Product createProduct = productRepository.save(product);
 		log.info("Товар {} был успешно создан ",createProduct.getProductName());
-		return productMapper.toResponseProduct(createProduct);
+		return productMapper.toResponseProductWithCalculatedFields(createProduct);
 	}
 
 	@Transactional
@@ -87,10 +86,10 @@ public class ProductCommandService {
 
 		productMapper.updateProduct(request,product);
 
-		Product save = productRepository.save(product);
+		Product saveProduct = productRepository.save(product);
 
-		log.info("Товар был успешно обновлен {}",save.getId());
-		return productMapper.toResponseProduct(save);
+		log.info("Товар был успешно обновлен {}",saveProduct.getId());
+		return productMapper.toResponseProductWithCalculatedFields(saveProduct);
 	}
 }
 
