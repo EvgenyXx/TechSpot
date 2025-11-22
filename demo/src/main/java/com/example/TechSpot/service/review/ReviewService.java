@@ -12,7 +12,7 @@ import com.example.TechSpot.exception.review.ReviewNotFoundException;
 import com.example.TechSpot.mapping.ReviewMapper;
 import com.example.TechSpot.repository.ReviewRepository;
 import com.example.TechSpot.service.product.ProductFinder;
-import com.example.TechSpot.service.user.UserFinder;
+import com.example.TechSpot.service.user.query.UserFinder;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -32,6 +32,8 @@ public class ReviewService {
 	private final ProductFinder productFinder;
 	private final ReviewRepository reviewRepository;
 	private final ReviewMapper reviewMapper;
+	private final ReviewFinder reviewFinder;
+	private final ReviewValidationService reviewValidationService;
 
 
 	@Transactional
@@ -62,23 +64,16 @@ public class ReviewService {
 
 	@Transactional
 	public void markReviewAsHelpful(Long reviewId, UUID userId) {
-		Review review = findById(reviewId);
-		checkUserHasNotVoted(reviewId,userId);
+		Review review = reviewFinder.findById(reviewId);
+		reviewValidationService.checkUserHasNotVoted(reviewId,userId);
 		review.setHelpfulCount(review.getHelpfulCount() + 1);
 		reviewRepository.save(review);
 		log.info("Пользователь {} отметил отзыв {} как полезный", userId, reviewId);
 	}
 
-	private Review findById (Long reviewId){
-		return reviewRepository.findById(reviewId)
-				.orElseThrow(ReviewNotFoundException::new);
-	}
 
-	private void checkUserHasNotVoted(Long reviewId, UUID userId){
-		if (reviewRepository.existsByIdAndUserId(reviewId, userId)){
-			throw new DuplicateReviewException();
-		}
-	}
+
+
 
 	@Transactional(readOnly = true)
 	public List<ReviewResponse> getProductReviews(Long productId) {
@@ -97,7 +92,7 @@ public class ReviewService {
 	public void deleteReview(Long reviewId, UUID userId) {
 		log.info("Удаление отзыва ID: {} пользователем: {}", reviewId, userId);
 
-		Review review = findById(reviewId);
+		Review review = reviewFinder.findById(reviewId);
 
 		if (!review.getUser().getId().equals(userId)) {
 			log.warn("Попытка удалить чужой отзыв. Отзыв: {}, Пользователь: {}", reviewId, userId);

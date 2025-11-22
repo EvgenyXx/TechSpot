@@ -77,20 +77,20 @@ public class ProductQueryService {
 	}
 
 	@Transactional(readOnly = true)
-	public Page<ProductResponse> filterProductsByCategory(ProductCategory category, Pageable pageable) {
+	public Page<ProductResponse> filterProductsByCategory(String slug, Pageable pageable) {
 		log.info("Фильтрация товаров по категории: {}. Страница: {}, размер: {}",
-				category, pageable.getPageNumber(), pageable.getPageSize());
+				slug, pageable.getPageNumber(), pageable.getPageSize());
 
 		Page<ProductResponse> result = productRepository
-				.findByCategory(category, pageable)
+				.findByCategorySlug(slug, pageable)
 				.map(product -> {
 					log.trace("Товар категории {}: ID={}, название='{}'",
-							category, product.getId(), product.getProductName());
+							slug, product.getId(), product.getProductName());
 					return productMapper.toResponseProductWithCalculatedFields(product);
 				});
 
 		log.info("Фильтрация завершена. Найдено товаров в категории {}: {} из {}",
-				category, result.getNumberOfElements(), result.getTotalElements());
+				slug, result.getNumberOfElements(), result.getTotalElements());
 		return result;
 	}
 
@@ -131,4 +131,26 @@ public class ProductQueryService {
 		log.info("Возвращено топ-{} товаров категории {}: {}", limit, category, result.size());
 		return result;
 	}
+
+
+
+//	public List<CategoryProductCount> countProductsPerCategory() {
+//		/**
+//		 * Посчитать сколько товаров в каждой категории
+//		 *
+//		 * Твои действия:
+//		 * 1. Найти таблицу категорий (categories)
+//		 * 2. Найти таблицу товаров (products)
+//		 * 3. Найти как они связаны (у товара есть category_id)
+//		 * 4. Написать SQL: для каждой категории посчитать товары
+//		 * 5. Сделать простой DTO с названием категории и количеством
+//		 * 6. Вернуть список
+//		 *
+//		 * Пример результата:
+//		 * [
+//		 *   {categoryName: "Ноутбуки", productCount: 25},
+//		 *   {categoryName: "Смартфоны", productCount: 42}
+//		 * ]
+//		 */
+//	}
 }

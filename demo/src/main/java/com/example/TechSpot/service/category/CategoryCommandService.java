@@ -19,13 +19,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class CategoryCommandService {
 	private final CategoryRepository categoryRepository;
 	private final CategoryMapper categoryMapper;
+	private final CategoryValidationService categoryValidationService;
 
 	public CategoryResponse createRootCategory(CategoryCreateRequest request) {
 		log.info("Создание корневой категории: name='{}', slug='{}'",
 				request.name(), request.slug());
 
-		checkingUniqueNameForParent(request.name(), null);
-		checkingUniqueSlugForParent(request.slug(), null);
+		categoryValidationService.validateUniqueNameForParent(request.name(), null);
+		categoryValidationService.validateUniqueSlugForParent(request.slug(), null);
 
 		Category root = categoryMapper.toCategoryCreateRoot(request);
 		Category saveRoot = categoryRepository.save(root);
@@ -42,8 +43,8 @@ public class CategoryCommandService {
 
 		Category parent = categoryRepository.findById(parentId).orElseThrow();
 
-		checkingUniqueNameForParent(request.name(), parent);
-		checkingUniqueSlugForParent(request.slug(), parent);
+		categoryValidationService.validateUniqueNameForParent(request.name(), parent);
+		categoryValidationService.validateUniqueSlugForParent(request.slug(), parent);
 
 		Category subcategory = Category.builder()
 				.name(request.name())
@@ -59,29 +60,5 @@ public class CategoryCommandService {
 		return categoryMapper.toCategoryResponse(saveSubcategory);
 	}
 
-	private void checkingUniqueNameForParent(String name, Category parent) {
-		log.debug("Проверка уникальности имени: name='{}', parent={}",
-				name, parent != null ? parent.getId() : "null");
 
-		if (categoryRepository.existsByNameAndParent(name, parent)) {
-			log.warn("Нарушение уникальности имени: name='{}' уже существует для parent={}",
-					name, parent != null ? parent.getId() : "root");
-			throw new CategoryAlreadyExistsException();
-		}
-
-		log.debug("Проверка имени пройдена: name='{}' уникально", name);
-	}
-
-	private void checkingUniqueSlugForParent(String slug, Category parent) {
-		log.debug("Проверка уникальности slug: slug='{}', parent={}",
-				slug, parent != null ? parent.getId() : "null");
-
-		if (categoryRepository.existsBySlugAndParent(slug, parent)) {
-			log.warn("Нарушение уникальности slug: slug='{}' уже существует для parent={}",
-					slug, parent != null ? parent.getId() : "root");
-			throw new SlugAlreadyExistsException();
-		}
-
-		log.debug("Проверка slug пройдена: slug='{}' уникален", slug);
-	}
 }

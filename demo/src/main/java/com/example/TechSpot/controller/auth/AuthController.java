@@ -6,7 +6,7 @@ import com.example.TechSpot.dto.user.UpdateProfileRequest;
 import com.example.TechSpot.dto.user.UserRequest;
 import com.example.TechSpot.dto.user.UserResponse;
 import com.example.TechSpot.security.CustomUserDetail;
-import com.example.TechSpot.service.user.AuthService;
+import com.example.TechSpot.service.user.auth.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -57,37 +57,8 @@ public class AuthController {
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
-	@Operation(
-			summary = "Получить текущего пользователя",
-			description = "Возвращает данные аутентифицированного пользователя. Требует активной сессии."
-	)
-	@ApiResponse(responseCode = "200", description = "Данные пользователя успешно получены")
-	@ApiResponse(responseCode = "401", description = "Пользователь не аутентифицирован")
-	@GetMapping(ApiPaths.CURRENT_USER)
-	@PreAuthorize(IS_USER)
-	public ResponseEntity<UserResponse> getCurrentUser(@AuthenticationPrincipal CustomUserDetail userDetail) {
-		log.info("HTTP GET api/auth/me {}", userDetail.email());
-		UserResponse response = authService.getCurrentUser(userDetail.id());
-		log.info("HTTP 200 успешно получили текущего пользователя {}", response.email());
-		return ResponseEntity.status(HttpStatus.OK).body(response);
-	}
 
-	@Operation(
-			summary = "Обновление профиля пользователя",
-			description = "Обновляет данные профиля текущего пользователя. Обновляются только переданные поля."
-	)
-	@ApiResponse(responseCode = "200", description = "Профиль успешно обновлен")
-	@ApiResponse(responseCode = "400", description = "Невалидные данные")
-	@ApiResponse(responseCode = "401", description = "Пользователь не аутентифицирован")
-	@PutMapping(ApiPaths.UPDATE_PROFILE)
-	@PreAuthorize(IS_USER)
-	public ResponseEntity<UserResponse> updateProfile(
-			@AuthenticationPrincipal CustomUserDetail customUserDetail,
-			@RequestBody @Valid UpdateProfileRequest request) {
 
-		log.info("HTTP PUT api/auth/profile {}", customUserDetail.email());
-		UserResponse response = authService.updateProfile(customUserDetail.id(), request);
-		log.info("HTTP 200 успешно обновили профиль текущего пользователя {}", customUserDetail.email());
-		return ResponseEntity.status(HttpStatus.OK).body(response);
-	}
+
+
 }

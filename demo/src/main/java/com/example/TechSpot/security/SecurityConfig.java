@@ -40,6 +40,8 @@ public class SecurityConfig {
 						.requestMatchers("/api/v1/auth/**").permitAll() // Разрешаем все auth endpoints
 						.requestMatchers("/api/v1/query/**").permitAll()
 						.requestMatchers("/api/v1/categories/**").permitAll()
+						.requestMatchers("/api/v1/password-reset/forgot").permitAll()
+						.requestMatchers("/api/v1/password-reset/reset").permitAll()
 						.requestMatchers("/api/v1/command/**").authenticated()
 						.requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
 						.anyRequest().authenticated()

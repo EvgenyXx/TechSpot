@@ -33,6 +33,12 @@ public record UserResponse(
 				description = "Номер телефона",
 				example = "+79123456789"
 		)
-		String phoneNumber
+		String phoneNumber,
+
+		@Schema(
+				description = "Статус пользователя",
+				example = "true или false"
+		)
+		boolean isActive
 ) {
 }

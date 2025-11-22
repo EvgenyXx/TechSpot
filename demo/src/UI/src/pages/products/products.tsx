@@ -46,7 +46,7 @@ export function Products() {
 
                  <div className="row" id="productsGrid">
                      <div className="col-12 text-center">
-                         <div className="spinner-border text-primary" role="status">
+                         <div className="spinner-border text-primary" roleV1="status">
                              <span className="visually-hidden">Загрузка...</span>
                          </div>
                          <p>Загружаем товары...</p>

@@ -6,7 +6,7 @@ import com.example.TechSpot.dto.cart.request.AddToCartRequest;
 import com.example.TechSpot.dto.cart.request.UpdateQuantityRequest;
 import com.example.TechSpot.dto.cart.response.CartResponse;
 import com.example.TechSpot.security.CustomUserDetail;
-import com.example.TechSpot.service.cart.CartService;
+import com.example.TechSpot.service.cart.CommandCartService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,20 +24,11 @@ import static com.example.TechSpot.constants.SecurityRoles.IS_USER;
 @RequestMapping(ApiPaths.CART_BASE)
 @RequiredArgsConstructor
 @Tag(name = "Cart", description = "API для управления корзиной покупок")
-public class CartController {
+public class CommandCartController {
 
-	private final CartService cartService;
+	private final CommandCartService commandCartService;
 
-	@Operation(
-			summary = "Получить корзину пользователя",
-			description = "Возвращает текущее состояние корзины с товарами"
-	)
-	@ApiResponse(responseCode = "200", description = "Корзина успешно получена")
-	@GetMapping
-	@PreAuthorize(IS_USER)
-	public ResponseEntity<CartResponse> getCart(@AuthenticationPrincipal CustomUserDetail customUserDetail) {
-		return ResponseEntity.ok(cartService.getCart(customUserDetail.id()));
-	}
+
 
 	@Operation(
 			summary = "Добавить товар в корзину",
@@ -51,7 +42,7 @@ public class CartController {
 	public ResponseEntity<CartResponse> addItem(
 			@RequestBody AddToCartRequest request,
 			@AuthenticationPrincipal CustomUserDetail userDetail) {
-		return ResponseEntity.ok(cartService.addToCart(request, userDetail.id()));
+		return ResponseEntity.ok(commandCartService.addToCart(request, userDetail.id()));
 	}
 
 	@Operation(
@@ -65,7 +56,7 @@ public class CartController {
 	@PreAuthorize(IS_USER)
 	public ResponseEntity<CartResponse> updateQuantity(@RequestBody UpdateQuantityRequest request,
 													   @AuthenticationPrincipal CustomUserDetail customUserDetail) {
-		return ResponseEntity.ok(cartService.updateQuantity(request,customUserDetail.id()));
+		return ResponseEntity.ok(commandCartService.updateQuantity(request,customUserDetail.id()));
 	}
 
 	@Operation(
@@ -78,7 +69,7 @@ public class CartController {
 	@PreAuthorize(IS_USER)
 	public ResponseEntity<CartResponse> removeItem(@PathVariable("cartItemId") Long cartItemId,
 												   @AuthenticationPrincipal CustomUserDetail customUserDetail) {
-		return ResponseEntity.ok(cartService.removeFromCart(cartItemId,customUserDetail.id()));
+		return ResponseEntity.ok(commandCartService.removeFromCart(cartItemId,customUserDetail.id()));
 	}
 
 	@Operation(
@@ -89,7 +80,7 @@ public class CartController {
 	@DeleteMapping(ApiPaths.CLEAR_CART)
 	@PreAuthorize(IS_USER)
 	public ResponseEntity<Void> clearCart(@AuthenticationPrincipal CustomUserDetail customUserDetail) {
-		cartService.clearCart(customUserDetail.id());
+		commandCartService.clearCart(customUserDetail.id());
 		return ResponseEntity.noContent().build();
 	}
 }
