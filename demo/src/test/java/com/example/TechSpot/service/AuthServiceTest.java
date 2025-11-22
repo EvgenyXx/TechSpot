@@ -6,7 +6,7 @@
 //import com.example.TechSpot.exception.user.DuplicateEmailException;
 //import com.example.TechSpot.mapping.UserMapper;
 //import com.example.TechSpot.repository.CustomerRepository;
-//import com.example.TechSpot.service.user.AuthService;
+//import com.example.TechSpot.service.user.auth.AuthService;
 //import org.junit.jupiter.api.Test;
 //import org.junit.jupiter.api.extension.ExtendWith;
 //import org.mockito.InjectMocks;

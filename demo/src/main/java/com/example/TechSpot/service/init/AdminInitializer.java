@@ -1,21 +1,19 @@
 package com.example.TechSpot.service.init;
 
 
-import com.example.TechSpot.entity.Role;
+
 import com.example.TechSpot.entity.User;
 import com.example.TechSpot.repository.UserRepository;
-import com.example.TechSpot.service.user.UserFinder;
+import com.example.TechSpot.service.role.RoleFinder;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Set;
-import java.util.UUID;
 
 @Service
 
@@ -23,12 +21,14 @@ import java.util.UUID;
 @Log4j2
 public class AdminInitializer {
 	private final PasswordEncoder passwordEncoder;
-	private final UserFinder userFinder;
+	private final RoleFinder roleFinder;
 	private final UserRepository userRepository;
+	private final CartInitializer cartInitializer;
 
 
 	@Transactional
 	@EventListener(ApplicationReadyEvent.class)
+	@Order(2)
 	public void createDefaultAdmin() {
 		log.info("=== СОЗДАНИЕ АДМИНА ===");
 
@@ -43,8 +43,11 @@ public class AdminInitializer {
 				.email("admin@techspot.com")
 				.isActive(true)
 				.hashPassword(encodedPassword)
-				.roles(Set.of(Role.ROLE_ADMIN, Role.ROLE_SELLER,Role.ROLE_USER))
+				.roles(roleFinder.getAllRoles())
 				.build();
+		admin.setCart(cartInitializer.createDefaultCart());
+
+		log.warn("ADMIN {}",admin);
 
 		User saved = userRepository.save(admin);
 

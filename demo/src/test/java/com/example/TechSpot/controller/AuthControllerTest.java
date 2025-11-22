@@ -2,7 +2,7 @@
 //
 //import com.example.TechSpot.dto.user.UserRequest;
 //import com.example.TechSpot.dto.user.UserResponse;
-//import com.example.TechSpot.service.user.AuthService;
+//import com.example.TechSpot.service.user.auth.AuthService;
 //import com.fasterxml.jackson.databind.ObjectMapper;
 //import org.junit.jupiter.api.Test;
 //import org.springframework.beans.factory.annotation.Autowired;

@@ -108,6 +108,7 @@ public class ProductQueryController {
 			summary = "Получить топ товаров по категории",
 			description = "Возвращает указанное количество самых популярных товаров в категории"
 	)
+
 	@ApiResponse(responseCode = "200", description = "Топ товаров успешно получен")
 	@ApiResponse(responseCode = "400", description = "Невалидная категория")
 	@GetMapping(ApiPaths.TOP_PRODUCTS + ApiPaths.CATEGORY_NAME)
@@ -130,10 +131,10 @@ public class ProductQueryController {
 	)
 	@ApiResponse(responseCode = "200", description = "Товары категории успешно получены")
 	@ApiResponse(responseCode = "400", description = "Невалидная категория")
-	@GetMapping(ApiPaths.PRODUCTS_BY_CATEGORY + ApiPaths.CATEGORY_NAME)
+	@GetMapping(ApiPaths.PRODUCTS_BY_CATEGORY + ApiPaths.SLUG)
 	public ResponseEntity<Page<ProductResponse>> getProductsByCategory(
 			@Parameter(description = "Категория товара", example = "ELECTRONICS")
-			@PathVariable ProductCategory category,
+			@PathVariable String slug,
 
 			@Parameter(description = "Номер страницы", example = "0")
 			@RequestParam(defaultValue = "0") int page,
@@ -144,7 +145,7 @@ public class ProductQueryController {
 		log.info("GET {}{}{} - Фильтрация по категории",
 				ApiPaths.QUERY_BASE, ApiPaths.PRODUCTS_BY_CATEGORY, ApiPaths.CATEGORY_NAME);
 		Pageable pageable = PageRequest.of(page, size);
-		Page<ProductResponse> products = productQueryService.filterProductsByCategory(category, pageable);
+		Page<ProductResponse> products = productQueryService.filterProductsByCategory(slug, pageable);
 		return ResponseEntity.ok(products);
 	}
 }

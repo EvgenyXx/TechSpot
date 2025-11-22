@@ -16,14 +16,15 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "cart")
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true) // ✅ добавил callSuper = true
 public class Cart extends BaseEntity{
 
-	@Id@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
 	private Long id;
 
-	@OneToOne
+	@OneToOne(mappedBy = "cart")  // ✅ mappedBy указывает что User владеет связью
 	private User user;
 
 

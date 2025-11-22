@@ -3,7 +3,7 @@
 //import com.example.TechSpot.entity.User;
 //import com.example.TechSpot.exception.user.UserNotFoundException;
 //import com.example.TechSpot.repository.CustomerRepository;
-//import com.example.TechSpot.service.user.UserFinder;
+//import com.example.TechSpot.service.user.query.UserFinder;
 //import org.junit.jupiter.api.Test;
 //import org.junit.jupiter.api.extension.ExtendWith;
 //import org.mockito.InjectMocks;
