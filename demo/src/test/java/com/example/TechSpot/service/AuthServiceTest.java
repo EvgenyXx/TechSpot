@@ -1,8 +1,8 @@
 //package com.example.TechSpot.service;
 //
-//import com.example.TechSpot.dto.user.UserRequest;
-//import com.example.TechSpot.dto.user.UserResponse;
-//import com.example.TechSpot.entity.User;
+//import com.example.TechSpot.modules.auth.users.dto.request.UserRequest;
+//import com.example.TechSpot.modules.auth.users.dto.response.UserResponse;
+//import com.example.TechSpot.modules.auth.users.User;
 //import com.example.TechSpot.exception.user.DuplicateEmailException;
 //import com.example.TechSpot.mapping.UserMapper;
 //import com.example.TechSpot.repository.CustomerRepository;

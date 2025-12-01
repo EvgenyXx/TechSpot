@@ -3,20 +3,53 @@ spring:
     url: jdbc:postgresql://localhost:5432/techspot_db
     username: techspot_user
     password: techspot_pass
-    driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
       ddl-auto: create
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-#    show-sql: true
-#    properties:
-#      hibernate:
-#        format_sql: true
+    show-sql: false
 
+  cache:
+    type: REDIS
+    redis:
+      time-to-live: 1h
+      cache-null-values: false
+      key-prefix: "TechSpot::"
+      use-key-prefix: true
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  # ==== ДОБАВЬ ЭТИ НАСТРОЙКИ EMAIL ====
+  mail:
+    host: smtp.yandex.ru
+    port: 587
+    username: EvgenyPavlov666@yandex.ru
+    password: qdnipddqaijipjam
+    properties:
+      mail:
+        smtp:
+          from: EvgenyPavlov666@yandex.ru  # ДОБАВЬ ЭТУ СТРОКУ
+          auth: true
+          starttls:
+            enable: true
 server:
   port: 8080
-#
-#logging:
-#  level:
-#    com.example.TechSpot: DEBUG
+
+app:
+  redis:
+    login:
+      login-attempts-prefix: "security::login_attempts::"
+      login-attempts-ttl: 15m
+      attempts-failed: 5
+
+logging:
+  level:
+    org.springframework.data.redis: DEBUG
+    org.springframework.cache: DEBUG
+    # ==== ДОБАВЬ ДЛЯ ОТЛАДКИ EMAIL ====
+    org.springframework.mail: DEBUG
+    com.sun.mail: DEBUG
+    jakarta.mail: DEBUG

@@ -1,13 +1,13 @@
 //package com.example.TechSpot.service;
 //
-//import com.example.TechSpot.dto.product.ProductCreateRequest;
-//import com.example.TechSpot.dto.product.ProductResponse;
-//import com.example.TechSpot.entity.Product;
-//import com.example.TechSpot.entity.ProductCategory;
-//import com.example.TechSpot.entity.User;
+//import com.example.TechSpot.modules.products.dto.request.ProductCreateRequest;
+//import com.example.TechSpot.modules.products.dto.response.ProductResponse;
+//import com.example.TechSpot.modules.products.entity.Product;
+//import com.example.TechSpot.modules.products.entity.ProductCategory;
+//import com.example.TechSpot.modules.auth.users.User;
 //import com.example.TechSpot.exception.product.ProductNotFoundException;
 //import com.example.TechSpot.mapping.ProductMapper;
-//import com.example.TechSpot.repository.ProductRepository;
+//import com.example.TechSpot.modules.products.repository.ProductRepository;
 //import org.junit.jupiter.api.Test;
 //import org.junit.jupiter.api.extension.ExtendWith;
 //import org.mockito.InjectMocks;

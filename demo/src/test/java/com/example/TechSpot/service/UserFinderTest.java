@@ -1,6 +1,6 @@
 //package com.example.TechSpot.service;
 //
-//import com.example.TechSpot.entity.User;
+//import com.example.TechSpot.modules.auth.users.User;
 //import com.example.TechSpot.exception.user.UserNotFoundException;
 //import com.example.TechSpot.repository.CustomerRepository;
 //import com.example.TechSpot.service.user.query.UserFinder;
