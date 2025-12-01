@@ -22,6 +22,19 @@ spring:
       host: localhost
       port: 6379
 
+  # ==== ДОБАВЬ ЭТИ НАСТРОЙКИ EMAIL ====
+  mail:
+    host: smtp.yandex.ru
+    port: 587
+    username: EvgenyPavlov666@yandex.ru
+    password: qdnipddqaijipjam
+    properties:
+      mail:
+        smtp:
+          from: EvgenyPavlov666@yandex.ru  # ДОБАВЬ ЭТУ СТРОКУ
+          auth: true
+          starttls:
+            enable: true
 server:
   port: 8080
 
@@ -36,3 +49,7 @@ logging:
   level:
     org.springframework.data.redis: DEBUG
     org.springframework.cache: DEBUG
+    # ==== ДОБАВЬ ДЛЯ ОТЛАДКИ EMAIL ====
+    org.springframework.mail: DEBUG
+    com.sun.mail: DEBUG
+    jakarta.mail: DEBUG

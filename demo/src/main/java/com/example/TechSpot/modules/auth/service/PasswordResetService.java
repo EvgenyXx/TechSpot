@@ -4,9 +4,11 @@ package com.example.TechSpot.modules.auth.service;
 import com.example.TechSpot.modules.api.user.PasswordResetProvider;
 import com.example.TechSpot.modules.auth.dto.ResetPasswordRequest;
 
+import com.example.TechSpot.modules.notification.PasswordResetEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +21,7 @@ public class PasswordResetService {
 
 
 	private final PasswordResetProvider passwordResetProvider;
+	private  final ApplicationEventPublisher applicationEventPublisher;
 
 
 
@@ -29,7 +32,7 @@ public class PasswordResetService {
 		String resetCode = passwordResetProvider.generateAndSetResetCode(email);
 
 		log.info("Сгенерирован код сброса пароля: {} для пользователя: ", resetCode);
-		//todo add send email
+		applicationEventPublisher.publishEvent(new PasswordResetEvent(email,resetCode));
 	}
 
 	@Transactional
