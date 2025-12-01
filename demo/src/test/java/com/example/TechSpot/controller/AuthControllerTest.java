@@ -1,7 +1,7 @@
 //package com.example.TechSpot.controller;
 //
-//import com.example.TechSpot.dto.user.UserRequest;
-//import com.example.TechSpot.dto.user.UserResponse;
+//import com.example.TechSpot.modules.auth.users.dto.request.UserRequest;
+//import com.example.TechSpot.modules.auth.users.dto.response.UserResponse;
 //import com.example.TechSpot.service.user.auth.AuthService;
 //import com.fasterxml.jackson.databind.ObjectMapper;
 //import org.junit.jupiter.api.Test;

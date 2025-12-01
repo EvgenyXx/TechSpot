@@ -5,13 +5,13 @@
 //import com.example.TechSpot.dto.cart.request.AddToCartRequest;
 //import com.example.TechSpot.dto.cart.request.RemoveFromCartRequest;
 //import com.example.TechSpot.dto.cart.request.UpdateQuantityRequest;
-//import com.example.TechSpot.entity.Cart;
-//import com.example.TechSpot.entity.CartItems;
-//import com.example.TechSpot.entity.Product;
-//import com.example.TechSpot.entity.User;
+//import com.example.TechSpot.modules.cart.entity.Cart;
+//import com.example.TechSpot.modules.cart.entity.CartItems;
+//import com.example.TechSpot.modules.products.entity.Product;
+//import com.example.TechSpot.modules.auth.users.User;
 //
 //import com.example.TechSpot.mapping.CartMapper;
-//import com.example.TechSpot.repository.CartRepository;
+//import com.example.TechSpot.modules.cart.repository.CartRepository;
 //import org.junit.jupiter.api.Test;
 //import org.junit.jupiter.api.extension.ExtendWith;
 //import org.mockito.ArgumentCaptor;
