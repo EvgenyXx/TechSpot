@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
-public class Product extends BaseEntity implements Serializable  {
+public class Product extends BaseEntity   {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

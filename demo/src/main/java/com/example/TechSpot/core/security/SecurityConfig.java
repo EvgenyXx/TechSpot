@@ -8,6 +8,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -49,9 +50,9 @@ public class SecurityConfig {
 				.sessionManagement(session -> session
 						.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // ← ВКЛЮЧАЕМ СЕССИИ!
 				)
-				.formLogin(form -> form.disable()) // Отключаем стандартную форму
-				.httpBasic(httpBasic -> httpBasic.disable()) // Отключаем Basic Auth
-				.csrf(csrf -> csrf.disable())
+				.formLogin(AbstractHttpConfigurer::disable) // Отключаем стандартную форму
+				.httpBasic(AbstractHttpConfigurer::disable) // Отключаем Basic Auth
+				.csrf(AbstractHttpConfigurer::disable)
 				.build();
 	}
 

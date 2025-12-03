@@ -5,6 +5,7 @@ import com.example.TechSpot.core.cache.LoginAttemptCacheService;
 import com.example.TechSpot.modules.api.user.UserLoginProvider;
 import com.example.TechSpot.modules.auth.dto.LoginRequest;
 import com.example.TechSpot.modules.auth.exception.InvalidPasswordException;
+import com.example.TechSpot.modules.notification.SuspiciousLoginAttemptEvent;
 import com.example.TechSpot.modules.users.dto.response.UserResponse;
 import com.example.TechSpot.modules.users.entity.User;
 import com.example.TechSpot.modules.users.exception.AccountNotActiveException;
@@ -12,12 +13,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 @Log4j2
@@ -28,6 +32,7 @@ public class LoginService {
 	private final PasswordEncoder passwordEncoder;
 	private final AuthenticationManager authenticationManager;
 	private final UserLoginProvider userLoginProvider;
+	private final ApplicationEventPublisher applicationEventPublisher;
 
 
 
@@ -49,6 +54,13 @@ public class LoginService {
 		if (!passwordEncoder.matches(request.password(), user.getHashPassword())) {
 			log.debug("Введен неверный пароль для пользователя {}", user.getId());
 			loginAttemptCacheService.loginFailed(request.email());
+			applicationEventPublisher.publishEvent(new SuspiciousLoginAttemptEvent(
+					request.email(),
+					httpRequest.getRemoteAddr(),
+					4,
+					httpRequest.getHeader("User-Agent"),
+					LocalDateTime.now()
+			));
 			throw new InvalidPasswordException();
 		}
 

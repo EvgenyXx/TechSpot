@@ -2,7 +2,7 @@ package com.example.TechSpot.modules.products.repository;
 
 import com.example.TechSpot.modules.products.entity.Product;
 
-import com.example.TechSpot.modules.products.entity.ProductCategory;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
