@@ -50,7 +50,7 @@ public class ProductCommandService {
 		product.setCategory(category);
 		Product createProduct = productRepository.save(product);
 		log.info("Товар {} был успешно создан ", createProduct.getProductName());
-		return productMapper.toResponseProductWithCalculatedFields(createProduct);
+		return productMapper.toResponseProductWithCalculatedFields(createProduct,null);
 	}
 
 
@@ -86,6 +86,6 @@ public class ProductCommandService {
 		Product saveProduct = productRepository.save(product);
 
 		log.info("Товар был успешно обновлен {}", saveProduct.getId());
-		return productMapper.toResponseProductWithCalculatedFields(saveProduct);
+		return productMapper.toResponseProductWithCalculatedFields(saveProduct,null);
 	}
 }

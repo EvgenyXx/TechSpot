@@ -1,11 +1,13 @@
 package com.example.TechSpot.modules.products.service.query;
 
 import com.example.TechSpot.core.config.CacheNames;
+import com.example.TechSpot.modules.api.discount.DiscountProvider;
 import com.example.TechSpot.modules.products.dto.response.ProductResponse;
 import com.example.TechSpot.modules.products.entity.ProductCategory;
 import com.example.TechSpot.modules.products.exception.ProductNotFoundException;
 import com.example.TechSpot.modules.products.mapper.ProductMapper;
 import com.example.TechSpot.modules.products.repository.ProductRepository;
+import com.example.TechSpot.modules.products.service.validation.ProductPricingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.cache.annotation.Cacheable;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,6 +27,7 @@ import java.util.UUID;
 public class ProductQueryService {
 	private final ProductRepository productRepository;
 	private final ProductMapper productMapper;
+	private final ProductPricingService productPricingService;
 
 
 	@Transactional(readOnly = true)
@@ -36,7 +40,8 @@ public class ProductQueryService {
 				.findById(productId)
 				.map(product -> {
 					log.debug("Товар найден: ID={}, название='{}'", productId, product.getProductName());
-					return productMapper.toResponseProductWithCalculatedFields(product);
+					BigDecimal discountPrice = productPricingService.calculate(product);
+					return productMapper.toResponseProductWithCalculatedFields(product,discountPrice);
 				})
 				.orElseThrow(() -> {
 					log.warn("Товар не найден: ID={}", productId);
@@ -56,7 +61,8 @@ public class ProductQueryService {
 				.findAll(pageable)
 				.map(product -> {
 					log.trace("Маппинг товара: ID={}", product.getId());
-					return productMapper.toResponseProductWithCalculatedFields(product);
+					BigDecimal discountPrice = productPricingService.calculate(product);
+					return productMapper.toResponseProductWithCalculatedFields(product,discountPrice);
 				});
 
 		log.info("Возвращено товаров: {} из {}", result.getNumberOfElements(), result.getTotalElements());
@@ -73,7 +79,8 @@ public class ProductQueryService {
 				.map(product -> {
 					log.debug("Найден товар по запросу '{}': ID={}, название='{}'",
 							query, product.getId(), product.getProductName());
-					return productMapper.toResponseProductWithCalculatedFields(product);
+					BigDecimal discountPrice = productPricingService.calculate(product);
+					return productMapper.toResponseProductWithCalculatedFields(product,discountPrice);
 				});
 
 		log.info("Поиск завершен. Найдено товаров: {} из {}",
@@ -91,7 +98,8 @@ public class ProductQueryService {
 				.map(product -> {
 					log.trace("Товар категории {}: ID={}, название='{}'",
 							slug, product.getId(), product.getProductName());
-					return productMapper.toResponseProductWithCalculatedFields(product);
+					BigDecimal discountPrice = productPricingService.calculate(product);
+					return productMapper.toResponseProductWithCalculatedFields(product,discountPrice);
 				});
 
 		log.info("Фильтрация завершена. Найдено товаров в категории {}: {} из {}",
@@ -109,7 +117,8 @@ public class ProductQueryService {
 				.map(product -> {
 					log.debug("Товар пользователя {}: ID={}, название='{}'",
 							customerId, product.getId(), product.getProductName());
-					return productMapper.toResponseProductWithCalculatedFields(product);
+					BigDecimal discountPrice = productPricingService.calculate(product);
+					return productMapper.toResponseProductWithCalculatedFields(product,discountPrice);
 				})
 				.toList();
 
@@ -129,7 +138,8 @@ public class ProductQueryService {
 				.map(product -> {
 					log.debug("Топ товар категории {}: ID={}, название='{}', цена={}",
 							slug, product.getId(), product.getProductName(), product.getPrice());
-					return productMapper.toResponseProductWithCalculatedFields(product);
+					BigDecimal discountPrice = productPricingService.calculate(product);
+					return productMapper.toResponseProductWithCalculatedFields(product,discountPrice);
 				})
 				.toList();
 

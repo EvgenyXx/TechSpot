@@ -8,6 +8,8 @@ import com.example.TechSpot.modules.users.entity.User;
 import com.example.TechSpot.modules.products.entity.Product;
 import org.mapstruct.*;
 
+import java.math.BigDecimal;
+
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
 
@@ -34,7 +36,7 @@ public interface ProductMapper {
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 	void updateProduct(ProductUpdateRequest request, @MappingTarget Product product);
 
-	default ProductResponse toResponseProductWithCalculatedFields(Product product) {
+	default ProductResponse toResponseProductWithCalculatedFields(Product product, BigDecimal discountedPrice) {
 		if (product == null) return null;
 
 		// 1. Основной маппинг (вызываем стандартный метод)
@@ -50,6 +52,7 @@ public interface ProductMapper {
 				response.id(),
 				response.productName(),
 				response.price(),
+				discountedPrice,
 				response.quantity(),
 				response.description(),
 				response.productCategory(),

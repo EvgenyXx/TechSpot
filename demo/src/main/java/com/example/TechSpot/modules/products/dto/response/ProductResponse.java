@@ -1,8 +1,6 @@
 package com.example.TechSpot.modules.products.dto.response;
 
-
 import io.swagger.v3.oas.annotations.media.Schema;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -15,39 +13,36 @@ public record ProductResponse(
 		@Schema(description = "Название товара", example = "iPhone 15 Pro")
 		String productName,
 
-		@Schema(description = "Цена товара", example = "999.99")
+		@Schema(description = "Цена товара без скидки", example = "999.99")
 		BigDecimal price,
+
+		@Schema(description = "Цена товара со скидкой (если скидки нет — null)", example = "899.99")
+		BigDecimal discountedPrice,
 
 		@Schema(description = "Количество товара на складе", example = "50")
 		Integer quantity,
 
-		@Schema(
-				description = "Описание товара",
-				example = "Новый iPhone 15 Pro с революционной камерой и процессором A17 Pro"
-		)
+		@Schema(description = "Описание товара")
 		String description,
 
-		@Schema(description = "Категория товара", example = "ELECTRONICS")
+		@Schema(description = "Категория товара")
 		String productCategory,
 
-		@Schema(description = "Имя продавца", example = "Иван Петров")
+		@Schema(description = "Имя продавца")
 		String customerName,
 
-		@Schema(description = "Email продавца", example = "ivan@example.com")
+		@Schema(description = "Email продавца")
 		String sellerEmail,
 
-		@Schema(description = "Дата создания товара", example = "2024-01-15T10:30:00")
+		@Schema(description = "Дата создания")
 		LocalDateTime createdAt,
 
-		@Schema(description = "Дата последнего обновления", example = "2024-01-16T14:20:00")
+		@Schema(description = "Дата обновления")
 		LocalDateTime updatedAt,
 
-		@Schema(description = "Доступен ли товар для покупки", example = "true")
+		@Schema(description = "Доступен ли товар")
 		Boolean isAvailable,
 
-		@Schema(description = "Отображаемое название категории", example = "Электроника")
+		@Schema(description = "Отображаемое название категории")
 		String categoryDisplayName
-)  implements Serializable{
-
-
-}
+) implements Serializable {}
