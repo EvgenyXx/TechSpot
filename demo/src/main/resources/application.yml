@@ -45,11 +45,11 @@ app:
       login-attempts-ttl: 15m
       attempts-failed: 5
 
-logging:
-  level:
-    org.springframework.data.redis: DEBUG
-    org.springframework.cache: DEBUG
-    # ==== ДОБАВЬ ДЛЯ ОТЛАДКИ EMAIL ====
-    org.springframework.mail: DEBUG
-    com.sun.mail: DEBUG
-    jakarta.mail: DEBUG
+#logging:
+#  level:
+#    org.springframework.data.redis: DEBUG
+#    org.springframework.cache: DEBUG
+#    # ==== ДОБАВЬ ДЛЯ ОТЛАДКИ EMAIL ====
+#    org.springframework.mail: DEBUG
+#    com.sun.mail: DEBUG
+#    jakarta.mail: DEBUG
