@@ -23,7 +23,7 @@ import static com.example.techspot.common.constants.SecurityRoles.IS_SELLER_OR_A
 import java.util.List;
 
 @RestController
-@RequestMapping(ApiPaths.QUERY_BASE)
+@RequestMapping(ApiPaths.PRODUCT_BASE)
 @Log4j2
 @RequiredArgsConstructor
 @Tag(name = "Products", description = "API для поиска и фильтрации товаров")
@@ -42,7 +42,7 @@ public class ProductQueryController {
 	public ResponseEntity<ProductResponse> getProduct(
 			@Parameter(description = "ID товара", example = "123")
 			@PathVariable Long productId)  {
-		log.info("GET {}{} - Получение товара", ApiPaths.QUERY_BASE, ApiPaths.PRODUCT_ID);
+		log.info("GET {}{} - Получение товара", ApiPaths.PRODUCT_BASE, ApiPaths.PRODUCT_ID);
 		ProductResponse response = productQueryService.getProduct(productId);
 		return ResponseEntity.ok(response);
 	}
@@ -60,7 +60,7 @@ public class ProductQueryController {
 			@Parameter(description = "Размер страницы", example = "12")
 			@RequestParam(defaultValue = "12") int size) {
 
-		log.info("GET {}?page={}&size={} - Все товары", ApiPaths.QUERY_BASE, page, size);
+		log.info("GET {}?page={}&size={} - Все товары", ApiPaths.PRODUCT_BASE, page, size);
 		Pageable pageable = PageRequest.of(page, size);
 		Page<ProductResponse> products = productQueryService.getAllProducts(pageable);
 		return ResponseEntity.ok(products);
@@ -82,7 +82,7 @@ public class ProductQueryController {
 			@Parameter(description = "Размер страницы", example = "12")
 			@RequestParam(defaultValue = "12") int size) {
 
-		log.info("GET {}{}?query={} - Поиск товаров", ApiPaths.QUERY_BASE, ApiPaths.SEARCH, query);
+		log.info("GET {}{}?query={} - Поиск товаров", ApiPaths.PRODUCT_BASE, ApiPaths.SEARCH, query);
 		Pageable pageable = PageRequest.of(page, size);
 		Page<ProductResponse> products = productQueryService.searchProducts(query, pageable);
 		return ResponseEntity.ok(products);
@@ -98,7 +98,7 @@ public class ProductQueryController {
 	public ResponseEntity<List<ProductResponse>> getMyProducts(
 			@AuthenticationPrincipal CustomUserDetail customUserDetail) {
 
-		log.info("GET {}{} - Мои товары", ApiPaths.QUERY_BASE, ApiPaths.GET_MY_PRODUCTS);
+		log.info("GET {}{} - Мои товары", ApiPaths.PRODUCT_BASE, ApiPaths.GET_MY_PRODUCTS);
 		List<ProductResponse> products = productQueryService.getMyProducts(customUserDetail.id());
 		return ResponseEntity.ok(products);
 	}
@@ -119,7 +119,7 @@ public class ProductQueryController {
 			@RequestParam(defaultValue = "3") int limit) {
 
 		log.info("GET {}{}{}?limit={} - Топ товары по категории",
-				ApiPaths.QUERY_BASE, ApiPaths.TOP_PRODUCTS, ApiPaths.CATEGORY_NAME, limit);
+				ApiPaths.PRODUCT_BASE, ApiPaths.TOP_PRODUCTS, ApiPaths.CATEGORY_NAME, limit);
 		List<ProductResponse> products = productQueryService.getTopProductsByCategory(slug, limit);
 		return ResponseEntity.ok(products);
 	}
@@ -142,7 +142,7 @@ public class ProductQueryController {
 			@RequestParam(defaultValue = "12") int size) {
 
 		log.info("GET {}{}{} - Фильтрация по категории",
-				ApiPaths.QUERY_BASE, ApiPaths.PRODUCTS_BY_CATEGORY, ApiPaths.CATEGORY_NAME);
+				ApiPaths.PRODUCT_BASE, ApiPaths.PRODUCTS_BY_CATEGORY, ApiPaths.CATEGORY_NAME);
 		Pageable pageable = PageRequest.of(page, size);
 		Page<ProductResponse> products = productQueryService.filterProductsByCategory(slug, pageable);
 		return ResponseEntity.ok(products);

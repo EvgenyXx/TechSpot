@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(ApiPaths.REVIEWS_BASE)
 @Log4j2
 @RequiredArgsConstructor
-@Tag(name = "Reviews", description = "API для управления отзывами о товарах") // ← ДОБАВЬ
+@Tag(name = "Reviews", description = "API для управления отзывами о товарах")
 public class CommandReviewController {
 
 	private final ReviewCommandService reviewCommandService;

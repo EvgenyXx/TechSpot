@@ -34,4 +34,9 @@ public class OrderItems extends BaseEntity {
 
 	@Column(name = "quantity",nullable = false)
 	private Integer quantity;
+
+	public BigDecimal getTotalPrice() {
+		return itemPrice.multiply(BigDecimal.valueOf(quantity));
+	}
+
 }

@@ -29,5 +29,10 @@ public record ReviewResponse(
 		@Schema(description = "Дата и время создания отзыва", example = "2024-01-15T14:30:00")
 		LocalDateTime createdAt,
 
-		boolean likedByUser // todo добавь свагер
+		@Schema(
+				description = "Помечен ли отзыв текущим пользователем как полезный/понравившийся",
+				example = "true",
+				defaultValue = "false"
+		)
+		boolean likedByUser
 ) implements Serializable {}

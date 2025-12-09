@@ -4,7 +4,7 @@ package com.example.techspot.modules.auth.service;
 import com.example.techspot.modules.api.user.PasswordResetProvider;
 import com.example.techspot.modules.auth.dto.ResetPasswordRequest;
 
-import com.example.techspot.modules.notification.PasswordResetEvent;
+import com.example.techspot.modules.notification.event.PasswordResetEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -33,6 +33,7 @@ public class PasswordResetService {
 
 		log.info("Сгенерирован код сброса пароля: {} для пользователя: ", resetCode);
 		applicationEventPublisher.publishEvent(new PasswordResetEvent(email,resetCode));
+
 	}
 
 	@Transactional

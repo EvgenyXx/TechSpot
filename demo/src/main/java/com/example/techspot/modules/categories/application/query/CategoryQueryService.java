@@ -22,9 +22,7 @@ public class CategoryQueryService {
 	private final CategoryRepository categoryRepository;
 	private final CategoryResponseFactory responseFactory;
 
-	/**
-	 * Корневые категории
-	 */
+
 	@Transactional(readOnly = true)
 	@Cacheable(value = CacheNames.CATEGORY_LIST, key = "'root'")
 	public List<CategoryResponse> getRootCategories() {
@@ -40,9 +38,7 @@ public class CategoryQueryService {
 				.toList();
 	}
 
-	/**
-	 * Подкатегории
-	 */
+
 	@Transactional(readOnly = true)
 	@Cacheable(value = CacheNames.CATEGORY_LIST, key = "#parentId")
 	public List<CategoryResponse> getSubcategories(Long parentId) {
@@ -59,9 +55,7 @@ public class CategoryQueryService {
 				.toList();
 	}
 
-	/**
-	 * Поиск по ID
-	 */
+
 	@Transactional(readOnly = true)
 	@Cacheable(value = CacheNames.CATEGORIES, key = "#categoryId")
 	public CategoryResponse getCategoryById(Long categoryId) {
@@ -73,9 +67,7 @@ public class CategoryQueryService {
 		return responseFactory.build(category);
 	}
 
-	/**
-	 * Поиск по slug
-	 */
+
 	@Transactional(readOnly = true)
 	@Cacheable(value = CacheNames.CATEGORIES, key = "#slug")
 	public CategoryResponse getCategoryBySlug(String slug) {
@@ -87,9 +79,7 @@ public class CategoryQueryService {
 		return responseFactory.build(category);
 	}
 
-	/**
-	 * Поиск по имени LIKE
-	 */
+
 	@Transactional(readOnly = true)
 	public List<CategoryResponse> searchCategories(String query) {
 		log.info("Поиск категорий: '{}'", query);
