@@ -24,7 +24,7 @@ import static com.example.techspot.common.constants.SecurityRoles.IS_SELLER_OR_A
 
 
 @RestController
-@RequestMapping(ApiPaths.COMMAND_BASE)
+@RequestMapping(ApiPaths.PRODUCT_BASE)
 @RequiredArgsConstructor
 @Log4j2
 @Tag(name = "Products", description = "API для управления товарами (создание, удаление)")
@@ -56,7 +56,7 @@ public class ProductCommandController {
 			@AuthenticationPrincipal CustomUserDetail customUserDetail) {
 
 		log.info("HTTP POST {}{} - Создание товара: {}",
-				ApiPaths.COMMAND_BASE, ApiPaths.CREATE_PRODUCT, request.productName());
+				ApiPaths.PRODUCT_BASE, ApiPaths.CREATE_PRODUCT, request.productName());
 		log.info("user {}",customUserDetail.email());
 		ProductResponse productResponse = productCommandService.create(request, customUserDetail.id());
 		log.info("HTTP 201 товар успешно создан: {}", request.productName());
@@ -89,7 +89,7 @@ public class ProductCommandController {
 			@PathVariable Long productId,
 			@AuthenticationPrincipal CustomUserDetail customUserDetail) {
 		log.info("DELETE {}{} - Удаление товара ID: {}",
-				ApiPaths.COMMAND_BASE, ApiPaths.PRODUCT_ID, productId);
+				ApiPaths.PRODUCT_BASE, ApiPaths.PRODUCT_ID, productId);
 
 		productCommandService.delete(productId, customUserDetail.id());
 
@@ -120,7 +120,7 @@ public class ProductCommandController {
 			@PathVariable Long productId,
 			@RequestBody @Valid ProductUpdateRequest request){
 		log.info("HTTP PUT {}{} - Обновление товара ID: {}",
-				ApiPaths.COMMAND_BASE, ApiPaths.PRODUCT_ID, productId);
+				ApiPaths.PRODUCT_BASE, ApiPaths.PRODUCT_ID, productId);
 		ProductResponse response = productCommandService.update(productId, request, userDetail.id());
 		log.info("HTTP 200 товар успешно обновлен: {}", request.productName());
 		return ResponseEntity

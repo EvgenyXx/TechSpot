@@ -2,7 +2,7 @@ package com.example.techspot.modules.orders.application.command;
 
 
 import com.example.techspot.modules.api.cart.CartOrderProvider;
-import com.example.techspot.modules.api.user.UserRepositoryProvider;
+import com.example.techspot.modules.api.user.UserProvider;
 import com.example.techspot.modules.cart.domain.entity.Cart;
 import com.example.techspot.modules.cart.application.exception.EmptyCartException;
 import com.example.techspot.modules.users.domain.entity.User;
@@ -16,10 +16,10 @@ import java.util.UUID;
 public class OrderCartValidationAction {
 
 	private final CartOrderProvider cartOrderProvider;
-	private final UserRepositoryProvider userRepositoryProvider;
+	private final UserProvider userProvider;
 
 	public Cart validateCart(UUID userId) {
-		User user = userRepositoryProvider.findById(userId);
+		User user = userProvider.findById(userId);
 		Cart cart = cartOrderProvider.ensureUserHasCart(user);
 
 		if (cart == null || cart.getCartItems().isEmpty()) {

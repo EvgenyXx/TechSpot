@@ -1,7 +1,7 @@
 package com.example.techspot.modules.cart.application.query;
 
 
-import com.example.techspot.modules.api.user.UserRepositoryProvider;
+import com.example.techspot.modules.api.user.UserProvider;
 import com.example.techspot.modules.cart.application.dto.response.CartResponse;
 import com.example.techspot.modules.cart.domain.entity.Cart;
 import com.example.techspot.modules.cart.application.command.CartInitializationService;
@@ -19,7 +19,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CartQueryService {
 
-	private final UserRepositoryProvider userRepositoryProvider;
+	private final UserProvider userProvider;
 	private final CartInitializationService cartInitializationService;
 	private final CartMapper cartMapper;
 
@@ -28,7 +28,7 @@ public class CartQueryService {
 	@Transactional(readOnly = true)
 	public CartResponse getCart(UUID userId) {
 		log.info("Запрос на получение корзины пользователя: {}", userId);
-		User user = userRepositoryProvider.findById(userId);
+		User user = userProvider.findById(userId);
 		Cart cart = cartInitializationService.ensureUserHasCart(user);
 		log.info("Корзина пользователя {} загружена, количество позиций: {}", userId, cart.getCartItems().size());
 		return cartMapper.toCart(cart);

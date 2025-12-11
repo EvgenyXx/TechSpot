@@ -3,6 +3,7 @@ package com.example.techspot.modules.products.infrastructure.adapter;
 import com.example.techspot.modules.api.product.ProductProvider;
 import com.example.techspot.modules.products.domain.entity.Product;
 import com.example.techspot.modules.products.domain.service.query.ProductEntityQueryService;
+import com.example.techspot.modules.products.infrastructure.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +13,15 @@ import org.springframework.stereotype.Service;
 public class ProductProviderImpl implements ProductProvider {
 
 	private final ProductEntityQueryService productEntityQueryService;
+	private final ProductRepository productRepository;
 
 	@Override
 	public Product findById(Long productId) {
 		return productEntityQueryService.findById(productId);
+	}
+
+	@Override
+	public boolean existsByCategoryId(Long categoryId) {
+		return productRepository.existsByCategoryId(categoryId);
 	}
 }

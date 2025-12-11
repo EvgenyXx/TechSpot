@@ -5,7 +5,6 @@ import com.example.techspot.core.cache.LoginAttemptCacheService;
 import com.example.techspot.modules.api.user.UserLoginProvider;
 import com.example.techspot.modules.auth.dto.LoginRequest;
 import com.example.techspot.modules.auth.exception.InvalidPasswordException;
-import com.example.techspot.modules.notification.SuspiciousLoginAttemptEvent;
 import com.example.techspot.modules.users.application.dto.response.UserResponse;
 import com.example.techspot.modules.users.domain.entity.User;
 import com.example.techspot.modules.users.application.exception.AccountNotActiveException;
@@ -54,13 +53,7 @@ public class LoginService {
 		if (!passwordEncoder.matches(request.password(), user.getHashPassword())) {
 			log.debug("Введен неверный пароль для пользователя {}", user.getId());
 			loginAttemptCacheService.loginFailed(request.email());
-			applicationEventPublisher.publishEvent(new SuspiciousLoginAttemptEvent(
-					request.email(),
-					httpRequest.getRemoteAddr(),
-					4,
-					httpRequest.getHeader("User-Agent"),
-					LocalDateTime.now()
-			));
+
 			throw new InvalidPasswordException();
 		}
 

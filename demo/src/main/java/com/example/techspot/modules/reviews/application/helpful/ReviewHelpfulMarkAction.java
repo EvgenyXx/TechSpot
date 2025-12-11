@@ -1,6 +1,6 @@
 package com.example.techspot.modules.reviews.application.helpful;
 
-import com.example.techspot.modules.api.user.UserRepositoryProvider;
+import com.example.techspot.modules.api.user.UserProvider;
 import com.example.techspot.modules.reviews.application.exception.ReviewAlreadyLikedException;
 import com.example.techspot.modules.reviews.domain.entity.Review;
 import com.example.techspot.modules.reviews.domain.entity.ReviewHelpfulVote;
@@ -19,7 +19,7 @@ public class ReviewHelpfulMarkAction {
 
 	private final ReviewHelpfulVoteRepository votes;
 	private final ReviewFinder reviews;
-	private final UserRepositoryProvider userRepositoryProvider;
+	private final UserProvider userProvider;
 
 	public void mark(Long reviewId, UUID userId) {
 
@@ -31,7 +31,7 @@ public class ReviewHelpfulMarkAction {
 			throw new ReviewAlreadyLikedException();
 		}
 
-		User user = userRepositoryProvider.findById(userId);
+		User user = userProvider.findById(userId);
 
 		votes.save(new ReviewHelpfulVote(
 				new ReviewHelpfulVoteId(reviewId, userId),

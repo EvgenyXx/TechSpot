@@ -20,80 +20,52 @@ import static com.example.techspot.common.constants.SecurityRoles.IS_ADMIN;
 @RestController
 @RequiredArgsConstructor
 @Log4j2
-@RequestMapping(ApiPaths.CATEGORIES_BASE)
+@RequestMapping(ApiPaths.ADMIN_CATEGORY)
 @PreAuthorize(IS_ADMIN)
 @Tag(name = "Admin Categories", description = "API для управления категориями (только для администраторов)")
 public class AdminCategoryCommandController {
 
 	private final CategoryCommandService categoryCommandService;
 
-	@Operation(
-			summary = "Создать корневую категорию",
-			description = """
-            Создает новую корневую категорию. Требуются права администратора.
-            
-            **Правила:**
-            - Название: 2-50 символов
-            - Slug: только латинские буквы, цифры и дефисы
-            - Категория создается как корневая (без родителя)
-            """
-	)
-	@ApiResponse(responseCode = "201", description = "Корневая категория успешно создана")
-	@ApiResponse(responseCode = "400", description = "Невалидные данные запроса")
-	@ApiResponse(responseCode = "401", description = "Требуется аутентификация")
-	@ApiResponse(responseCode = "403", description = "Недостаточно прав")
-	@ApiResponse(responseCode = "409", description = "Категория с таким slug уже существует")
+	// ------------------------------ CREATE ROOT ------------------------------
+	@Operation(summary = "Создать корневую категорию")
 	@PostMapping(ApiPaths.ROOT)
 	public ResponseEntity<CategoryResponse> createCategoryRoot(
-			@RequestBody @Valid CategoryCreateRequest request) {
-
-		log.info("POST {}{} - Создание корневой категории: {}",
-				ApiPaths.CATEGORIES_BASE, ApiPaths.ROOT, request.name());
-
+			@RequestBody @Valid CategoryCreateRequest request
+	) {
+		log.info("Создание корневой категории: {}", request.name());
 		CategoryResponse response = categoryCommandService.createRootCategory(request);
-
-		log.info("Корневая категория создана: ID {}, название: {}",
-				response.id(), response.name());
-
-		return ResponseEntity
-				.status(HttpStatus.CREATED)
-				.body(response);
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
-	@Operation(
-			summary = "Создать подкатегорию",
-			description = """
-            Создает новую подкатегорию для указанной родительской категории. 
-            Требуются права администратора.
-            
-            **Правила:**
-            - Родительская категория должна существовать
-            - Название: 2-50 символов  
-            - Slug: только латинские буквы, цифры и дефисы
-            """
-	)
-	@ApiResponse(responseCode = "201", description = "Подкатегория успешно создана")
-	@ApiResponse(responseCode = "400", description = "Невалидные данные запроса")
-	@ApiResponse(responseCode = "401", description = "Требуется аутентификация")
-	@ApiResponse(responseCode = "403", description = "Недостаточно прав")
-	@ApiResponse(responseCode = "404", description = "Родительская категория не найдена")
-	@ApiResponse(responseCode = "409", description = "Категория с таким slug уже существует")
+	// ------------------------------ CREATE SUB ------------------------------
+	@Operation(summary = "Создать подкатегорию")
 	@PostMapping(ApiPaths.PARENT_ID + ApiPaths.SUBCATEGORIES)
 	public ResponseEntity<CategoryResponse> createSubcategories(
 			@PathVariable Long parentId,
-			@Valid @RequestBody CategoryCreateRequest request) {
-
-		log.info("POST {}{}{} - Создание подкатегории для родителя ID: {}, название: {}",
-				ApiPaths.CATEGORIES_BASE, ApiPaths.PARENT_ID, ApiPaths.SUBCATEGORIES,
-				parentId, request.name());
-
+			@Valid @RequestBody CategoryCreateRequest request
+	) {
+		log.info("Создание подкатегории для parentId={}", parentId);
 		CategoryResponse response = categoryCommandService.createSubcategory(parentId, request);
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);
+	}
 
-		log.info("Подкатегория создана: ID {}, название: {}, родитель: {}",
-				response.id(), response.name(), parentId);
+	// ------------------------------ DELETE ROOT ------------------------------
+	@Operation(summary = "Удалить корневую категорию")
+	@DeleteMapping(ApiPaths.CATEGORY_ID + ApiPaths.ROOT)
+	public ResponseEntity<Void> deleteRoot(@PathVariable Long categoryId) {
+		log.info("DELETE root category id={}", categoryId);
+		categoryCommandService.deleteRootCategoryById(categoryId);
+		return ResponseEntity.noContent().build();
+	}
 
-		return ResponseEntity
-				.status(HttpStatus.CREATED)
-				.body(response);
+	// ------------------------------ DELETE SUB ------------------------------
+	@Operation(summary = "Удалить подкатегорию")
+	@DeleteMapping(ApiPaths.CATEGORY_ID + ApiPaths.SUB)
+	public ResponseEntity<Void> deleteSub(@PathVariable Long categoryId) {
+		log.info("DELETE subcategory id={}", categoryId);
+		categoryCommandService.deleteSubcategoryById(categoryId);
+		return ResponseEntity.noContent().build();
 	}
 }
+

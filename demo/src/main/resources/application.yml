@@ -1,3 +1,6 @@
+server:
+  port: 8080
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/techspot_db
@@ -11,32 +14,40 @@ spring:
 
   cache:
     type: REDIS
-    redis:
-      time-to-live: 1h
-      cache-null-values: false
-      key-prefix: "TechSpot::"
-      use-key-prefix: true
 
   data:
     redis:
       host: localhost
       port: 6379
 
-  # ==== ДОБАВЬ ЭТИ НАСТРОЙКИ EMAIL ====
   mail:
     host: smtp.yandex.ru
     port: 587
     username: EvgenyPavlov666@yandex.ru
     password: qdnipddqaijipjam
     properties:
-      mail:
-        smtp:
-          from: EvgenyPavlov666@yandex.ru  # ДОБАВЬ ЭТУ СТРОКУ
-          auth: true
-          starttls:
-            enable: true
-server:
-  port: 8080
+      mail.smtp.from: EvgenyPavlov666@yandex.ru
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+
+  kafka:
+    bootstrap-servers: localhost:9092
+
+    consumer:
+      group-id: techspot-consumer
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+logging:
+  level:
+    org.apache.kafka: WARN
 
 app:
   redis:
@@ -45,11 +56,8 @@ app:
       login-attempts-ttl: 15m
       attempts-failed: 5
 
-#logging:
-#  level:
-#    org.springframework.data.redis: DEBUG
-#    org.springframework.cache: DEBUG
-#    # ==== ДОБАВЬ ДЛЯ ОТЛАДКИ EMAIL ====
-#    org.springframework.mail: DEBUG
-#    com.sun.mail: DEBUG
-#    jakarta.mail: DEBUG
+  kafka:
+    topics:
+      order-created: order.created.topic
+      order-updated: order.updated.topic
+      password-reset: password.reset.topic

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Заказ оформлен — TechSpot</title>
+
+    <!-- АДАПТИВ ДЛЯ EMAIL-КЛИЕНТОВ -->
+    <style>
+
+        body {
+          margin: 0;
+          background: #e5e7eb;
+          font-family: Arial, sans-serif;
+        }
+
+        .wrapper {
+          width: 100%;
+          background: #e5e7eb;
+          padding: 20px 0;
+        }
+
+        .container {
+          width: 100%;
+          max-width: 600px;
+          margin: 0 auto;
+          background: #ffffff;
+          border-radius: 16px;
+          overflow: hidden;
+          box-shadow: 0 0 20px rgba(0,0,0,0.15);
+        }
+
+        .header {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          text-align: center;
+          padding: 30px 20px;
+          color: #fff;
+        }
+
+        .logo {
+          width: 150px;
+          margin-bottom: 15px;
+        }
+
+        .title {
+          font-size: 26px;
+          font-weight: bold;
+          margin-bottom: 5px;
+        }
+
+        .subtitle {
+          font-size: 16px;
+          opacity: .9;
+        }
+
+        .content {
+          padding: 25px 25px 40px;
+        }
+
+        .icon {
+          width: 60px;
+          height: 60px;
+          background: linear-gradient(135deg, #48c6ef 0%, #6f86d6 100%);
+          color: #fff;
+          border-radius: 50%;
+          margin: 0 auto 20px;
+          font-size: 32px;
+          line-height: 60px;
+          text-align: center;
+        }
+
+        .greeting {
+          text-align: center;
+          margin-bottom: 25px;
+        }
+
+        .greeting h2 {
+          font-size: 22px;
+          margin-bottom: 10px;
+          color: #2d3748;
+        }
+
+        .greeting p {
+          font-size: 16px;
+          color: #4a5568;
+        }
+
+        .order-card {
+          background: #f8f9fa;
+          padding: 20px;
+          border-radius: 12px;
+          border: 1px solid #e2e8f0;
+          margin-bottom: 25px;
+        }
+
+        .order-number {
+          font-size: 20px;
+          font-weight: bold;
+          color: #2d3748;
+        }
+
+        .order-badge {
+          background: #667eea;
+          color: #fff;
+          padding: 6px 15px;
+          border-radius: 20px;
+          font-size: 12px;
+          font-weight: bold;
+        }
+
+        .order-header {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 15px;
+        }
+
+        .info-row {
+          display: flex;
+          justify-content: space-between;
+          font-size: 16px;
+          padding: 8px 0;
+          border-bottom: 1px solid #e2e8f0;
+        }
+
+        .total-section {
+          background: linear-gradient(135deg, #48c6ef 0%, #6f86d6 100%);
+          padding: 25px;
+          border-radius: 14px;
+          text-align: center;
+          color: white;
+          margin: 25px 0;
+        }
+
+        .total-amount {
+          font-size: 34px;
+          font-weight: bold;
+        }
+
+        /* ТАБЛИЦА ТОВАРОВ */
+        .products-section {
+          margin-top: 20px;
+        }
+
+        .products-title {
+          font-size: 18px;
+          margin-bottom: 10px;
+          font-weight: bold;
+          color: #2d3748;
+        }
+
+        table.products-table {
+          width: 100%;
+          border-collapse: collapse;
+        }
+
+        .products-table th {
+          text-align: left;
+          font-size: 13px;
+          padding: 8px;
+          color: #4a5568;
+          border-bottom: 2px solid #e2e8f0;
+        }
+
+        .products-table td {
+          padding: 10px 5px;
+          font-size: 15px;
+          color: #2d3748;
+          border-bottom: 1px solid #edf2f7;
+        }
+
+        .support-message {
+          background: #eef6ff;
+          padding: 20px;
+          border-radius: 12px;
+          border-left: 4px solid #4299e1;
+          text-align: center;
+          margin-top: 30px;
+        }
+
+        .footer {
+          text-align: center;
+          padding: 25px;
+          background: #f8f9fa;
+          border-top: 1px solid #e2e8f0;
+        }
+
+        .footer-logo {
+          width: 110px;
+          opacity: .8;
+          margin-bottom: 15px;
+        }
+
+        .footer-text {
+          font-size: 13px;
+          color: #909aa7;
+        }
+
+        /* 📱 МОБИЛЬНЫЙ АДАПТИВ */
+        @media screen and (max-width: 480px) {
+
+          .container {
+            border-radius: 0;
+          }
+
+          .title {
+            font-size: 22px;
+          }
+
+          .subtitle {
+            font-size: 14px;
+          }
+
+          .order-header {
+            flex-direction: column;
+            gap: 8px;
+          }
+
+          .info-row {
+            font-size: 14px;
+          }
+
+          .products-table th,
+          .products-table td {
+            font-size: 13px !important;
+            padding: 6px 3px !important;
+          }
+
+          .total-amount {
+            font-size: 28px;
+          }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="wrapper">
+    <div class="container">
+
+        <!-- HEADER -->
+        <div class="header">
+            <img src="cid:logo" class="logo">
+            <div class="title">🎉 Спасибо за покупку!</div>
+            <div class="subtitle">Ваш заказ успешно оформлен</div>
+        </div>
+
+        <div class="content">
+
+            <div class="icon">✓</div>
+
+            <div class="greeting">
+                <h2>Приветствуем вас в TechSpot!</h2>
+                <p>Ваш заказ уже обрабатывается нашей командой.</p>
+            </div>
+
+            <!-- ORDER CARD -->
+            <div class="order-card">
+                <div class="order-header">
+                    <div class="order-number">Заказ #<span th:text="${orderId}">1</span></div>
+                    <div class="order-badge">Оформлен</div>
+                </div>
+
+                <div class="info-row">
+                    <span>Дата оформления:</span>
+                    <span>
+            <span th:text="${#temporals.format(orderDate, 'dd MMMM yyyy')}">8 декабря 2025</span>
+            <small style="color:#888;"><br><span th:text="${#temporals.format(orderDate, 'HH:mm')}">23:22</span></small>
+          </span>
+                </div>
+
+                <div class="info-row">
+                    <span>Количество товаров:</span>
+                    <span><span th:text="${itemsCount}">3</span> шт.</span>
+                </div>
+
+            </div>
+
+            <!-- TOTAL -->
+            <div class="total-section">
+                <div>Итоговая сумма</div>
+                <div class="total-amount"><span th:text="${#numbers.formatDecimal(totalPrice, 1, 2, 'COMMA')}">63 980</span> ₽</div>
+            </div>
+
+            <!-- PRODUCTS TABLE -->
+            <div class="products-section">
+                <div class="products-title">📦 Состав заказа</div>
+
+                <table class="products-table">
+                    <thead>
+                    <tr>
+                        <th>Товар</th>
+                        <th>Кол-во</th>
+                        <th>Цена</th>
+                        <th>Сумма</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item : ${items}">
+                        <td th:text="${item.title}">Ноутбук XYZ</td>
+                        <td th:text="${item.quantity}">1</td>
+                        <td><span th:text="${#numbers.formatDecimal(item.price, 1, 2, 'COMMA')}">59 990</span> ₽</td>
+                        <td><span th:text="${#numbers.formatDecimal(item.total, 1, 2, 'COMMA')}">59 990</span> ₽</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- SUPPORT -->
+            <div class="support-message">
+                Если у вас возникли вопросы — ответьте на это письмо.<br />
+                Мы на связи 24/7 💙
+            </div>
+
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <img src="cid:logo" class="footer-logo">
+            <div class="footer-text">© 2025 TechSpot. Все права защищены.</div>
+            <div class="footer-text">С заботой о каждом клиенте</div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

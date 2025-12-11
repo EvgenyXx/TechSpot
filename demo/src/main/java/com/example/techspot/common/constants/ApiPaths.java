@@ -12,14 +12,16 @@ public class ApiPaths {
 	public static final String AUTH_BASE = API_V1 + "/auth";
 	public static final String CART_BASE = API_V1 + "/cart";
 	public static final String ORDER_BASE = API_V1 + "/order";
-	public static final String COMMAND_BASE = API_V1 + "/command";
-	public static final String QUERY_BASE = API_V1 + "/query";
+	public static final String PRODUCT_BASE = API_V1 + "/products";
+
 	public static final String CATEGORIES_BASE = API_V1 + "/categories";
 	public static final String REVIEWS_BASE = API_V1 + "/reviews";
 	public static final String ADMIN_BASE = API_V1 + "/admin";
 	public static final String PROFILE_BASE = API_V1 + "/profile";
 	public static final String PASSWORD_BASE = API_V1 + "/password-reset";
 	public static final String DISCOUNT_BASE = API_V1 + "/discount";
+	public static final String ADMIN_CATEGORY = API_V1 + "/admin/categories";
+
 
 	// ENDPOINT paths для методов
 	public static final String REGISTER = "/register";
@@ -46,6 +48,7 @@ public class ApiPaths {
 	public static final String USER_STATISTICS = "/statistics";
 	public static final String PASSWORD_FORGOT = "/forgot";
 	public static final String PASSWORD_RESET = "/reset";
+	public static final String SUB = "/sub";
 
 
 

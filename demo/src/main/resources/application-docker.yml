@@ -1,3 +1,6 @@
+server:
+  port: 8080
+
 spring:
   datasource:
     url: jdbc:postgresql://postgres:5432/techspot_db
@@ -8,15 +11,42 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
     properties:
       hibernate:
         format_sql: true
 
-server:
-  port: 8080
+  redis:
+    host: redis
+    port: 6379
+
+  kafka:
+    bootstrap-servers: kafka:29092
+    consumer:
+      group-id: techspot-consumer
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
 logging:
   level:
+    org.apache.kafka: WARN
     com.example.TechSpot: DEBUG
+
+app:
+  redis:
+    login:
+      login-attempts-prefix: "security::login_attempts::"
+      login-attempts-ttl: 15m
+      attempts-failed: 5
+
+  kafka:
+    topics:
+      order-created: order.created.topic
+      order-updated: order.updated.topic
+      password-reset: password.reset.topic

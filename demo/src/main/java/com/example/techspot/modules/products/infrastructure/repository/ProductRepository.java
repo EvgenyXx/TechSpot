@@ -68,4 +68,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
 
 	@Query("SELECT p FROM Product p WHERE p.category.slug = :slug ORDER BY p.price DESC")
 	Page<Product> findTopByCategorySlugOrderByPriceDesc(@Param("slug") String slug, Pageable pageable);
+
+
+	boolean existsByCategoryId(Long categoryId);
 }

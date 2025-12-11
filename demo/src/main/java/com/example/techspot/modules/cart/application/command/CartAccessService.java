@@ -1,6 +1,6 @@
 package com.example.techspot.modules.cart.application.command;
 
-import com.example.techspot.modules.api.user.UserRepositoryProvider;
+import com.example.techspot.modules.api.user.UserProvider;
 import com.example.techspot.modules.cart.domain.entity.Cart;
 import com.example.techspot.modules.users.domain.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CartAccessService {
 
-	private final UserRepositoryProvider users;
+	private final UserProvider users;
 	private final CartInitializationService initService;
 
 	public Cart getCartForUser(UUID userId) {

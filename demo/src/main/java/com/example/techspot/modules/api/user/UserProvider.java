@@ -4,7 +4,7 @@ import com.example.techspot.modules.users.domain.entity.User;
 
 import java.util.UUID;
 
-public interface UserRepositoryProvider {
+public interface UserProvider {
 
 
 	User findById(UUID userId);

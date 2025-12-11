@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-//todo log
 public class CategoryProviderImpl implements CategoryProvider {
 	private final CategoryRepository categoryRepository;
 

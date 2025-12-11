@@ -3,7 +3,7 @@ package com.example.techspot.core.init;
 
 import com.example.techspot.modules.users.domain.entity.AppRole;
 import com.example.techspot.modules.users.domain.entity.Role;
-import com.example.techspot.modules.users.infratructure.RoleRepository;
+import com.example.techspot.modules.users.infratructure.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.context.event.ApplicationReadyEvent;

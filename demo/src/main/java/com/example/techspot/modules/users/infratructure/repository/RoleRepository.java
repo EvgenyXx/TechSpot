@@ -1,4 +1,4 @@
-package com.example.techspot.modules.users.infratructure;
+package com.example.techspot.modules.users.infratructure.repository;
 
 
 import com.example.techspot.modules.users.domain.entity.Role;

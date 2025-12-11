@@ -1,7 +1,7 @@
 package com.example.techspot.modules.reviews.application.command.action;
 
 import com.example.techspot.modules.api.product.ProductProvider;
-import com.example.techspot.modules.api.user.UserRepositoryProvider;
+import com.example.techspot.modules.api.user.UserProvider;
 import com.example.techspot.modules.products.domain.entity.Product;
 import com.example.techspot.modules.reviews.application.dto.ReviewCreateRequest;
 import com.example.techspot.modules.reviews.domain.entity.Review;
@@ -17,7 +17,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class ReviewCreationAction {
-	private final UserRepositoryProvider users;
+	private final UserProvider users;
 	private final ProductProvider products;
 	private final ReviewValidationService validation;
 	private final ReviewRepository reviews;
