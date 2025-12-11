@@ -16,7 +16,7 @@ public class NotificationDispatcher {
 	private final List<NotificationStrategy> strategies;
 
 
-	@EventListener
+//	@EventListener
 	public void handler(NotificationEvent event){
 
 		System.out.println("NotificationDispatcher В ДЕЛЕ ЕЕЕ БОЙ");

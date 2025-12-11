@@ -1,6 +1,6 @@
 package com.example.techspot.modules.products.application.command;
 
-import com.example.techspot.modules.api.user.UserRepositoryProvider;
+import com.example.techspot.modules.api.user.UserProvider;
 import com.example.techspot.modules.products.application.dto.request.ProductUpdateRequest;
 import com.example.techspot.modules.products.application.dto.response.ProductResponse;
 import com.example.techspot.modules.products.domain.entity.Product;
@@ -21,7 +21,7 @@ public class ProductUpdateAction {
 	private final ProductRepository productRepository;
 	private final ProductMapper productMapper;
 	private final ProductEntityQueryService productQuery;
-	private final UserRepositoryProvider userRepository;
+	private final UserProvider userRepository;
 
 	public ProductResponse update(Long id, ProductUpdateRequest req, UUID userId) {
 

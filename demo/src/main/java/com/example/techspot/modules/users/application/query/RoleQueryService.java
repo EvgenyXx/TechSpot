@@ -4,7 +4,7 @@ package com.example.techspot.modules.users.application.query;
 import com.example.techspot.modules.users.domain.entity.AppRole;
 import com.example.techspot.modules.users.domain.entity.Role;
 import com.example.techspot.modules.users.application.exception.RoleNotFoundException;
-import com.example.techspot.modules.users.infratructure.RoleRepository;
+import com.example.techspot.modules.users.infratructure.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
