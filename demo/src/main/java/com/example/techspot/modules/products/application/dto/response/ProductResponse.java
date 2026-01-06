@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Schema(description = "Ответ с информацией о товаре")
 public record ProductResponse(
@@ -44,5 +45,7 @@ public record ProductResponse(
 		Boolean isAvailable,
 
 		@Schema(description = "Отображаемое название категории")
-		String categoryDisplayName
+		String categoryDisplayName,
+
+		List<String>imageUrls
 ) implements Serializable {}

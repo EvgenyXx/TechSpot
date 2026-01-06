@@ -4,11 +4,13 @@ import com.example.techspot.modules.products.application.dto.request.ProductCrea
 import com.example.techspot.modules.products.application.dto.response.ProductResponse;
 import com.example.techspot.modules.products.application.dto.request.ProductUpdateRequest;
 import com.example.techspot.modules.categories.domain.entity.Category;
+import com.example.techspot.modules.products.domain.entity.ProductImage;
 import com.example.techspot.modules.users.domain.entity.User;
 import com.example.techspot.modules.products.domain.entity.Product;
 import org.mapstruct.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
@@ -21,6 +23,7 @@ public interface ProductMapper {
 	@Mapping(target = "sellerEmail", source = "user.email")
 	@Mapping(target = "productCategory", source = "category", qualifiedByName = "categoryToString")
 	@Mapping(target = "sellerName", source = "user", qualifiedByName = "toFirstname")
+	@Mapping(target = "imageUrls", source = "images", qualifiedByName = "imagesToUrls")
 	ProductResponse toResponseProduct(Product product);
 
 	@Named("categoryToString")
@@ -61,11 +64,22 @@ public interface ProductMapper {
 				response.createdAt(),
 				response.updatedAt(),
 				isAvailable,                    // 👈 вычисленное
-				categoryDisplayName             // 👈 вычисленное
+				categoryDisplayName,             // 👈 вычисленное
+				response.imageUrls()
+
 		);
 	}
 
-		default String buildCategoryDisplayName(Category category) {
+	@Named("imagesToUrls")
+	default List<String> imagesToUrls(List<ProductImage> images) {
+		if (images == null) return List.of();
+		return images.stream()
+				.map(ProductImage::getImageUrl)
+				.toList();
+	}
+
+
+	default String buildCategoryDisplayName(Category category) {
 			if (category == null) return null;
 			return category.getName();
 		}

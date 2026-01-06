@@ -3,6 +3,7 @@ package com.example.techspot.modules.products.application.dto.response;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record ProductCacheModel(
 		Long id,
@@ -16,5 +17,6 @@ public record ProductCacheModel(
 		LocalDateTime createdAt,
 		LocalDateTime updatedAt,
 		Boolean isAvailable,
-		String categoryDisplayName
+		String categoryDisplayName,
+		List<String> imageUrls
 ) implements Serializable {}

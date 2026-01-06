@@ -1,6 +1,7 @@
 package com.example.techspot;
 
 import com.example.techspot.core.config.KafkaProperties;
+import com.example.techspot.core.config.ProductImagesProperties;
 import com.example.techspot.core.config.RedisProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,7 +13,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @SpringBootApplication
 @EnableJpaAuditing
 @EnableCaching
-@EnableConfigurationProperties({RedisProperties.class, KafkaProperties.class})
+@EnableConfigurationProperties({RedisProperties.class,
+		KafkaProperties.class,
+        ProductImagesProperties.class})
 public class TechSpotApplication {
 
 	public static void main(String[] args) {

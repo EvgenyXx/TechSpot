@@ -45,6 +45,9 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
+
+
+
 logging:
   level:
     org.apache.kafka: WARN
@@ -61,3 +64,10 @@ app:
       order-created: order.created.topic
       order-updated: order.updated.topic
       password-reset: password.reset.topic
+
+  storage:
+    type: local
+    local-path: ./storage
+
+  product-images:
+    max-count: 5
