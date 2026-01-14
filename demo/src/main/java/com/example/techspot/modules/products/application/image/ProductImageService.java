@@ -1,6 +1,6 @@
 package com.example.techspot.modules.products.application.image;
 
-
+import com.example.techspot.modules.products.application.exception.ProductImageNotFound;
 import com.example.techspot.modules.products.domain.entity.Product;
 import com.example.techspot.modules.products.domain.entity.ProductImage;
 import com.example.techspot.modules.products.domain.service.query.ProductEntityQueryService;
@@ -9,6 +9,7 @@ import com.example.techspot.modules.products.infrastructure.storage.LocalImageSt
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -16,16 +17,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductImageService {
 
-	private final ProductEntityQueryService productEntityQueryService;
+	private final ProductEntityQueryService productQueryService;
 	private final ProductImageRepository productImageRepository;
 	private final LocalImageStorageService storageService;
 
 	/**
-	 * Привязка списка картинок к товару
+	 * Загрузка изображений и привязка к товару
 	 */
 	@Transactional
-	public void attachToProduct(Long productId, List<String> imageUrls) {
-		Product product = productEntityQueryService.findById(productId);
+	public List<String> addImages(Long productId, List<MultipartFile> files) {
+
+		Product product = productQueryService.findById(productId);
+
+		List<String> imageUrls = storageService.saveProductImages(productId, files);
 
 		for (String url : imageUrls) {
 			ProductImage image = new ProductImage();
@@ -33,15 +37,18 @@ public class ProductImageService {
 			image.setProduct(product);
 			productImageRepository.save(image);
 		}
+
+		return imageUrls;
 	}
 
 	/**
-	 * Удаление картинки и файла
+	 * Удаление изображения
 	 */
 	@Transactional
-	public void deleteProductImage(Long imageId) {
+	public void deleteImage(Long imageId) {
+
 		ProductImage image = productImageRepository.findById(imageId)
-				.orElseThrow(() -> new RuntimeException("Image not found"));
+				.orElseThrow(ProductImageNotFound::new);
 
 		storageService.deleteProductImage(image.getImageUrl());
 		productImageRepository.delete(image);

@@ -1,4 +1,4 @@
-package com.example.techspot.modules.notification;
+package com.example.techspot.modules.notification.listener;
 
 
 import com.example.techspot.modules.notification.event.OrderCreatedEvent;
@@ -18,7 +18,6 @@ public class KafkaNotificationListener {
 			groupId = "notifications"
 	)
 	public void onMessage(OrderCreatedEvent event) {
-		System.err.println("СООБЩЕНИЕ ПРИШЛО ФФФФФФФФФФФФФФ");
 		dispatcher.handler(event);
 	}
 }

@@ -1,5 +1,6 @@
 package com.example.techspot.modules.notification.service;
 
+import com.example.techspot.modules.notification.exception.EmailSendException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +41,7 @@ public class EmailSender {
 
 		} catch (Exception e) {
 			log.error("Ошибка отправки email: {}", e.getMessage(), e);
-			throw new RuntimeException("Ошибка отправки email", e);
+			throw new EmailSendException();
 		}
 	}
 }

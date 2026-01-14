@@ -50,6 +50,9 @@ public class ApiPaths {
 	public static final String PASSWORD_RESET = "/reset";
 	public static final String SUB = "/sub";
 
+	public static final String PRODUCT_IMAGES = "/{productId}/images";
+	public static final String PRODUCT_IMAGE_ID = "/images/{imageId}";
+
 
 
 	// PATH VARIABLES (шаблоны с {})

@@ -38,7 +38,6 @@ public class ProductQueryController {
 	@ApiResponse(responseCode = "200", description = "Товар успешно найден")
 	@ApiResponse(responseCode = "404", description = "Товар с указанным ID не найден")
 	@GetMapping(ApiPaths.PRODUCT_ID)
-	@PreAuthorize(IS_SELLER_OR_ADMIN)
 	public ResponseEntity<ProductResponse> getProduct(
 			@Parameter(description = "ID товара", example = "123")
 			@PathVariable Long productId)  {

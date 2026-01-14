@@ -1,4 +1,4 @@
-package com.example.techspot.modules.auth.controller;
+package com.example.techspot.modules.auth.api;
 
 import com.example.techspot.common.constants.ApiPaths;
 import com.example.techspot.modules.users.application.dto.request.UserRequest;
