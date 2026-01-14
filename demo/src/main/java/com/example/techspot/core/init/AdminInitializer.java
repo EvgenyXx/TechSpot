@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-
 @RequiredArgsConstructor
 @Log4j2
 public class AdminInitializer {
@@ -29,9 +28,22 @@ public class AdminInitializer {
 
 	@Transactional
 	@EventListener(ApplicationReadyEvent.class)
-	@Order(2)
+	@Order(1)
 	public void createDefaultAdmin() {
 		log.info("=== СОЗДАНИЕ АДМИНА ===");
+
+		// ✅ ПРОВЕРКА 1: Админ уже существует?
+		if (userRepository.findByEmail("admin@techspot.com").isPresent()) {
+			log.info("Админ уже существует, пропускаем создание");
+			return;
+		}
+
+		// ✅ ПРОВЕРКА 2: Роли загрузились из БД?
+		var roles = roleQueryService.getAllRoles();
+		if (roles.isEmpty()) {
+			log.error("Роли не найдены в БД! Сначала запусти миграции с ролями.");
+			return; // или кидай исключение
+		}
 
 		String rawPassword = "admin123";
 		String encodedPassword = passwordEncoder.encode(rawPassword);
@@ -44,19 +56,12 @@ public class AdminInitializer {
 				.email("admin@techspot.com")
 				.isActive(true)
 				.hashPassword(encodedPassword)
-				.roles(roleQueryService.getAllRoles())
+				.roles(roles) // ← теперь roles гарантированно не пустые
 				.build();
 		admin.setCart(cartInitializer.createDefaultCart());
 
-		log.warn("ADMIN {}",admin);
-
 		User saved = userRepository.save(admin);
 
-		// ✅ ПРОВЕРКА ПАРОЛЯ
-		boolean passwordMatches = passwordEncoder.matches(rawPassword, saved.getHashPassword());
-		log.info("Пароль проверен: {}", passwordMatches ? "СОВПАДАЕТ" : "НЕ СОВПАДАЕТ");
-		log.info("Raw password: {}", rawPassword);
-		log.info("Encoded password: {}", saved.getHashPassword());
-		log.info("=== ========= ===");
+		log.info("Админ создан успешно. ID: {}", saved.getId());
 	}
 }

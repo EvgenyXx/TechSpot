@@ -16,10 +16,9 @@ public class NotificationDispatcher {
 	private final List<NotificationStrategy> strategies;
 
 
-//	@EventListener
+
 	public void handler(NotificationEvent event){
 
-		System.out.println("NotificationDispatcher В ДЕЛЕ ЕЕЕ БОЙ");
 		strategies.stream()
 				.filter(s -> s.support(event))
 				.findFirst()

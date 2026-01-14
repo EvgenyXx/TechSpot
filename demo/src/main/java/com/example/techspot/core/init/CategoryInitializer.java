@@ -19,7 +19,7 @@ public class CategoryInitializer {
 
 	@EventListener(ApplicationReadyEvent.class)
 	@Transactional
-	@Order(3)
+	@Order(2)
 	public void initCategories() {
 		if (categoryRepository.count() > 0) {
 			log.info("Категории уже существуют, пропускаем инициализацию");

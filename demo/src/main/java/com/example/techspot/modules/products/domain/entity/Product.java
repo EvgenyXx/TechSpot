@@ -9,6 +9,8 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
@@ -45,6 +47,13 @@ public class Product extends BaseEntity  {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id",nullable = false)
 	private User user;
+
+	@OneToMany(
+			mappedBy = "product",
+			cascade = CascadeType.ALL,
+			orphanRemoval = true
+	)
+	private List<ProductImage> images = new ArrayList<>();
 
 	public boolean isAvailable(){
 		return this.getQuantity() > 0;

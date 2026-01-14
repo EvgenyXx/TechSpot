@@ -9,6 +9,7 @@ import com.example.techspot.modules.users.infratructure.repository.UserRepositor
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Log4j2
+@Profile("dev")
 public class ProductInitializer {
 
 	private final ProductRepository productRepository;
@@ -29,7 +31,7 @@ public class ProductInitializer {
 
 	@Transactional
 	@EventListener(ApplicationReadyEvent.class)
-	@Order(4) // После создания категорий и пользователей
+	@Order(3) // После создания категорий и пользователей
 	public void createDemoProducts() {
 		log.info("=== СОЗДАНИЕ ТЕСТОВЫХ ТОВАРОВ ===");
 

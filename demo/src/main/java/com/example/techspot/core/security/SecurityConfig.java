@@ -45,6 +45,7 @@ public class SecurityConfig {
 						.requestMatchers("/api/v1/password-reset/reset").permitAll()
 						.requestMatchers("/api/v1/command/**").authenticated()
 						.requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+						.requestMatchers( "/images/**").permitAll()
 						.anyRequest().authenticated()
 				)
 				.sessionManagement(session -> session

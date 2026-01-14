@@ -2,6 +2,10 @@ server:
   port: 8080
 
 spring:
+
+  profiles:
+    active: dev
+
   datasource:
     url: jdbc:postgresql://localhost:5432/techspot_db
     username: techspot_user
@@ -9,7 +13,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     show-sql: false
 
   cache:
@@ -45,6 +49,12 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
+  flyway:
+    enabled: true
+    baseline-on-migrate: false
+    locations: classpath:db/migration
+
+
 logging:
   level:
     org.apache.kafka: WARN
@@ -61,3 +71,10 @@ app:
       order-created: order.created.topic
       order-updated: order.updated.topic
       password-reset: password.reset.topic
+
+  storage:
+    type: local
+    local-path: ./storage
+
+  product-images:
+    max-count: 5

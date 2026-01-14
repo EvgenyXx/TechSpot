@@ -1,4 +1,4 @@
-package com.example.techspot.modules.notification;
+package com.example.techspot.modules.notification.listener;
 
 import com.example.techspot.modules.notification.event.PasswordResetEvent;
 import com.example.techspot.modules.notification.service.NotificationDispatcher;
